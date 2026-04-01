@@ -35,7 +35,7 @@
         </button>
     </div>
 
-    <!-- CABECERA PRINCIPAL -->
+    <!-- CABECERA PRINCIPAL (Minimalista) -->
     <header class="bg-gray-50 dark:bg-gray-800 shadow-sm sticky top-0 z-30 transition-colors duration-300">
         <div class="max-w-md mx-auto p-4 flex justify-between items-center gap-2">
             <div class="flex items-center gap-2">
@@ -47,12 +47,8 @@
                 <!-- Alerta vacaciones bajas -->
                 <span id="alerta-vacaciones" class="hidden text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200 font-black alerta-vacaciones">⚠️ Pocos días V</span>
             </div>
-            <div class="flex items-center gap-1.5">
-                <!-- Botones acciones (Más pequeños para móvil) -->
-                <button id="btn-multi-select" class="p-1.5 rounded-xl text-base font-bold shadow-sm transition-all active:scale-95 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100" title="Selección múltiple">☑️</button>
-                <button id="btn-toggle-candado" class="p-1.5 rounded-xl text-base font-bold shadow-sm transition-all active:scale-95 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">🔓</button>
-                <button id="btn-abrir-stats" class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 p-1.5 rounded-xl text-base font-bold shadow-sm transition-colors active:scale-95">📊</button>
-                <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-2.5 py-1.5 rounded-xl text-xs font-black shadow-sm flex items-center gap-1 active:scale-95">
+            <div class="flex items-center">
+                <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-3 py-2 rounded-xl text-sm font-black shadow-sm flex items-center gap-1 active:scale-95">
                     <span id="total-global">0 €</span> <span id="icono-ojo" class="ml-1 opacity-70 text-[10px]">👁️</span>
                 </button>
             </div>
@@ -61,7 +57,7 @@
         <div id="banner-multi" class="hidden bg-blue-600 text-white text-xs font-black text-center py-2 px-4 flex items-center justify-between max-w-md mx-auto">
             <span>☑️ SELECCIÓN MÚLTIPLE — <span id="count-seleccionados">0</span> días</span>
             <div class="flex gap-2">
-                <button id="btn-aplicar-multi" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-black">APLICAR</button>
+                <button id="btn-aplicar-multi" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-black shadow-sm">APLICAR</button>
                 <button id="btn-cancelar-multi" class="opacity-70 px-2 py-1 rounded-lg font-black">✕</button>
             </div>
         </div>
@@ -69,21 +65,28 @@
 
     <main id="contenedor-meses" class="max-w-md mx-auto p-4 space-y-6"></main>
 
-    <!-- BOTÓN FLOTANTE MENÚ (HAMBURGUESA) -->
+    <!-- BOTÓN FLOTANTE MENÚ (HAMBURGUESA Y OPCIONES) -->
     <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
-        <!-- Menú desplegable -->
         <div id="fab-menu" class="hidden flex flex-col gap-2 items-end mb-1">
-            <button id="btn-tema" class="flex items-center justify-start gap-3 w-40 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span id="texto-tema">🌙 Oscuro</span>
+            <button id="btn-abrir-stats-fab" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
+                <span>📊 Estadísticas</span>
             </button>
-            <button id="btn-hoy" class="flex items-center justify-start gap-3 w-40 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span>📅 Hoy</span>
+            <button id="btn-multi-select-fab" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
+                <span id="texto-multi">☑️ Selec. Múltiple</span>
             </button>
-            <button id="btn-logout-fab" class="flex items-center justify-start gap-3 w-40 bg-red-50 dark:bg-red-900/80 text-red-600 dark:text-red-300 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-red-100 dark:border-red-800">
+            <button id="btn-toggle-candado-fab" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
+                <span id="texto-candado">🔓 Desbloqueado</span>
+            </button>
+            <button id="btn-tema" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
+                <span id="texto-tema">🌙 Modo Oscuro</span>
+            </button>
+            <button id="btn-hoy" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
+                <span>📅 Ir a Hoy</span>
+            </button>
+            <button id="btn-logout-fab" class="flex items-center justify-start gap-3 w-48 bg-red-50 dark:bg-red-900/80 text-red-600 dark:text-red-300 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-red-100 dark:border-red-800 mt-2">
                 <span>🚪 Salir</span>
             </button>
         </div>
-        <!-- Botón principal 3 rayas -->
         <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -101,13 +104,15 @@
             <div class="space-y-4">
                 <!-- Vacaciones -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
-                    <div><p class="font-bold dark:text-white text-xs opacity-60">Vacaciones (V)</p><input type="number" id="input-base-v" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="22"></div>
+                    <div><p class="font-bold dark:text-white text-xs opacity-60">Vacaciones (Días Base)</p><input type="number" id="input-base-v" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="22"></div>
                     <p class="text-xl font-black text-emerald-600"><span id="count-v">0</span> <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-v">22</span></p>
                 </div>
                 <!-- Asuntos propios -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
-                    <div><p class="font-bold dark:text-white text-xs opacity-60">Asuntos Propios (AP)</p><input type="number" id="input-base-ap" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="6"></div>
-                    <p class="text-xl font-black text-teal-600"><span id="count-ap">0</span> <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-ap">6</span></p>
+                    <div><p class="font-bold dark:text-white text-xs opacity-60">Asuntos Propios (Días Base)</p><input type="number" id="input-base-ap" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="6"></div>
+                    <div class="text-right">
+                        <p class="text-xl font-black text-teal-600"><span id="count-ap">0</span>h <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-ap">48</span>h</p>
+                    </div>
                 </div>
                 <!-- Horas extras -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
@@ -123,28 +128,25 @@
                         <span>⏱️ <span id="horas-mes-actual">0h</span></span>
                     </div>
                 </div>
-                <!-- Gráfico mensual -->
+                <!-- Gráficos ... -->
                 <div class="pt-2">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-3 px-1">Guardias por mes</p>
                     <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl border border-gray-100 dark:border-gray-600">
                         <canvas id="chart-guardias-mes" height="120"></canvas>
                     </div>
                 </div>
-                <!-- Comparativa años -->
                 <div class="pt-2">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-3 px-1">Comparativa años</p>
                     <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl border border-gray-100 dark:border-gray-600">
                         <canvas id="chart-comparativa-anios" height="100"></canvas>
                     </div>
                 </div>
-                <!-- Horas por mes -->
                 <div class="pt-2">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-3 px-1">Horas extras por mes</p>
                     <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl border border-gray-100 dark:border-gray-600">
                         <canvas id="chart-horas-mes" height="100"></canvas>
                     </div>
                 </div>
-                <!-- Desglose guardias -->
                 <div class="pt-2">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-2 px-1">Conteo de Guardias</p>
                     <div id="contenedor-desglose-guardias" class="grid grid-cols-2 gap-2 text-xs"></div>
@@ -153,58 +155,80 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN DÍA -->
+    <!-- MODAL EDICIÓN DÍA / SELECCIÓN MÚLTIPLE -->
     <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-end sm:items-center justify-center z-40 p-4 backdrop-blur-sm">
         <div class="bg-gray-50 dark:bg-gray-800 w-full max-w-md sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-1">
                 <h3 id="titulo-modal" class="text-xl font-black dark:text-white tracking-tight">Día Seleccionado</h3>
                 <button id="btn-cerrar-modal" class="text-gray-400 text-4xl font-light">&times;</button>
             </div>
-            <!-- Día de la semana o texto multi-select -->
-            <p id="subtitulo-modal-diasemana" class="text-xs font-black uppercase text-blue-500 mb-5 tracking-widest"></p>
+            <!-- Día de la semana o info AP / Multiselección -->
+            <p id="subtitulo-modal-diasemana" class="text-xs font-black uppercase text-blue-500 mb-5 tracking-widest transition-all"></p>
 
-            <div id="vista-principal" class="grid grid-cols-2 gap-2">
-                <button class="opcion-turno p-4 rounded-2xl bg-blue-100 dark:bg-blue-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
-                <button id="btn-menu-guardias" class="p-4 rounded-2xl bg-red-100 dark:bg-red-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform">GUARDIA...</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-cyan-100 dark:bg-cyan-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M8">M8</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-rose-100 dark:bg-rose-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="guardia" data-subtipo="F" data-precio="150">FESTIVO</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-sky-100 dark:bg-sky-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M9">M9</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-green-100 dark:bg-green-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="L">LIBRANZA</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-orange-100 dark:bg-orange-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="TT">TARDE</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-emerald-100 dark:bg-emerald-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="V">VACACIONES</button>
-                <button id="btn-menu-sedes" class="p-4 rounded-2xl bg-purple-100 dark:bg-purple-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform">SEDE...</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-green-200 dark:bg-green-800 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="IV">INTENTO V.</button>
+            <div id="vista-principal" class="grid grid-cols-2 gap-2 transition-opacity duration-300">
+                <!-- Escala Azules -->
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-300 text-blue-900 dark:bg-blue-800 dark:text-blue-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M8">M8</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-400 text-blue-900 dark:bg-blue-700 dark:text-blue-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M9">M9</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-500 text-white dark:bg-blue-600 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="TT">TARDE</button>
+                
+                <!-- Escala Verdes -->
+                <button class="opcion-turno p-4 rounded-2xl bg-green-200 text-green-900 dark:bg-green-900 dark:text-green-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="guardia" data-subtipo="F" data-precio="150">FESTIVO</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-green-300 text-green-900 dark:bg-green-800 dark:text-green-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="L">LIBRANZA</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-green-400 text-green-900 dark:bg-green-700 dark:text-green-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="V">VACACIONES</button>
 
+                <!-- Otros Colores Específicos -->
+                <button class="opcion-turno p-4 rounded-2xl bg-yellow-300 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="IV">INTENTO V.</button>
+                <button id="btn-menu-guardias" class="p-4 rounded-2xl bg-red-100 text-red-900 dark:bg-red-900 dark:text-red-200 font-black text-sm shadow-sm active:scale-95 transition-transform">GUARDIA...</button>
+                <button id="btn-menu-sedes" class="p-4 rounded-2xl bg-purple-200 text-purple-900 dark:bg-purple-900 dark:text-purple-200 font-black text-sm shadow-sm active:scale-95 transition-transform">SEDE...</button>
+
+                <!-- Botones Borrar (Advertencia) -->
                 <div class="col-span-2 grid grid-cols-3 gap-2 mt-6 pt-5 border-t dark:border-gray-700">
-                    <button class="opcion-turno p-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-[10px] font-black uppercase" data-categoria="turno" data-tipo="ninguno">Borrar Turno</button>
-                    <button class="opcion-turno p-2 rounded-xl bg-gray-200 dark:bg-gray-700 text-[10px] font-black uppercase" data-categoria="guardia" data-subtipo="ninguno">Borrar Guardia</button>
-                    <button class="opcion-turno p-2 rounded-xl bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 text-[10px] font-black uppercase" data-categoria="borrar">Borrar Todo</button>
+                    <button class="opcion-turno p-2 rounded-xl bg-amber-400 text-amber-900 dark:bg-amber-700 dark:text-amber-100 text-[10px] font-black uppercase" data-categoria="turno" data-tipo="ninguno">Borrar Turno</button>
+                    <button class="opcion-turno p-2 rounded-xl bg-amber-400 text-amber-900 dark:bg-amber-700 dark:text-amber-100 text-[10px] font-black uppercase" data-categoria="guardia" data-subtipo="ninguno">Borrar Guardia</button>
+                    <button class="opcion-turno p-2 rounded-xl bg-red-500 text-white dark:bg-red-700 dark:text-white text-[10px] font-black uppercase" data-categoria="borrar">Borrar Todo</button>
                 </div>
             </div>
 
+            <!-- Menú Guardias (Mantiene rojo) -->
             <div id="vista-guardias" class="hidden">
                 <button id="btn-volver-principal" class="mb-4 text-sm font-black text-blue-600 flex items-center gap-1 uppercase tracking-tighter">← Volver a opciones</button>
                 <div id="grid-guardias" class="grid grid-cols-3 gap-2"></div>
             </div>
 
+            <!-- Menú Sedes (Mantiene morado) -->
             <div id="vista-sedes" class="hidden">
                 <button id="btn-volver-principal-sedes" class="mb-4 text-sm font-black text-purple-600 flex items-center gap-1 uppercase tracking-tighter">← Volver a opciones</button>
                 <div id="grid-sedes" class="grid grid-cols-2 gap-2"></div>
             </div>
 
-            <!-- Sección nota + horas -->
+            <!-- Sección nota + horas extra + horas AP -->
             <div id="seccion-nota-horas" class="mt-8 pt-5 border-t dark:border-gray-700">
                 <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block">Nota Personalizada</label>
                 <input type="text" id="input-nota" class="w-full border-2 dark:border-gray-600 rounded-2xl p-4 bg-white dark:bg-gray-700 text-sm focus:ring-4 focus:ring-blue-500/20 outline-none transition-all shadow-inner" placeholder="Escribe algo para recordar...">
-                <div class="mt-5 flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border dark:border-gray-600">
-                    <span class="text-xs font-black uppercase opacity-40">⏱️ Horas Extras</span>
-                    <div class="flex items-center gap-5">
-                        <button id="btn-restar-hora-dia" class="w-10 h-10 rounded-2xl bg-red-100 text-red-700 font-black text-2xl active:scale-90 transition-transform shadow-sm">-</button>
-                        <span id="count-horas-dia" class="font-black text-xl w-10 text-center">0</span>
-                        <button id="btn-sumar-hora-dia" class="w-10 h-10 rounded-2xl bg-green-100 text-green-700 font-black text-2xl active:scale-90 transition-transform shadow-sm">+</button>
+                
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    <!-- Horas Extras -->
+                    <div class="flex flex-col items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border dark:border-gray-600">
+                        <span class="text-[10px] font-black uppercase opacity-40 mb-3 text-center w-full block">⏱️ Extras</span>
+                        <div class="flex items-center gap-3">
+                            <button id="btn-restar-hora-dia" class="w-9 h-9 rounded-xl bg-red-100 text-red-700 font-black text-xl active:scale-90 transition-transform shadow-sm">-</button>
+                            <span id="count-horas-dia" class="font-black text-lg w-8 text-center">0</span>
+                            <button id="btn-sumar-hora-dia" class="w-9 h-9 rounded-xl bg-green-100 text-green-700 font-black text-xl active:scale-90 transition-transform shadow-sm">+</button>
+                        </div>
+                    </div>
+                    <!-- Horas Asuntos Propios -->
+                    <div class="flex flex-col items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border dark:border-gray-600">
+                        <span class="text-[10px] font-black uppercase opacity-40 mb-3 text-center w-full block text-teal-600 dark:text-teal-400">⏳ A. Propios</span>
+                        <div class="flex items-center gap-3">
+                            <button id="btn-restar-ap-dia" class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90 transition-transform shadow-sm">-</button>
+                            <span id="count-ap-dia" class="font-black text-lg w-8 text-center">0</span>
+                            <button id="btn-sumar-ap-dia" class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90 transition-transform shadow-sm">+</button>
+                        </div>
                     </div>
                 </div>
-                <button id="btn-guardar-nota" class="mt-6 w-full py-5 bg-blue-600 text-white rounded-3xl font-black shadow-xl active:scale-95 transition-transform uppercase tracking-widest">GUARDAR DÍA</button>
+
+                <button id="btn-guardar-nota" class="mt-5 w-full py-5 bg-blue-600 text-white rounded-3xl font-black shadow-xl active:scale-95 transition-transform uppercase tracking-widest">GUARDAR DÍA</button>
             </div>
         </div>
     </div>
@@ -248,7 +272,6 @@
         let horasExtrasPorAnio = {};
         let notasMes = {};                    
         let diaSeleccionadoStr = null;
-        let botonDiaRef = null;
         let mesSeleccionadoData = null;
         let soloLectura = localStorage.getItem('soloLectura') === 'true';
         let ocultarDinero = localStorage.getItem('ocultarDinero') === 'true';
@@ -278,10 +301,15 @@
         ];
 
         const estilosT = {
-            'M7':'bg-blue-100 text-blue-800', 'M8':'bg-cyan-100 text-cyan-800', 'M9':'bg-sky-100 text-sky-800',
-            'TT':'bg-orange-100 text-orange-800', 'V':'bg-emerald-100 text-emerald-800',
-            'L':'bg-green-100 text-green-800', 'IV':'bg-green-200 text-green-800',
-            'Sede': 'bg-purple-100 text-purple-800'
+            'M7': 'bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-200',
+            'M8': 'bg-blue-300 text-blue-900 dark:bg-blue-800 dark:text-blue-200',
+            'M9': 'bg-blue-400 text-blue-900 dark:bg-blue-700 dark:text-blue-200',
+            'TT': 'bg-blue-500 text-white dark:bg-blue-600 dark:text-blue-100',
+            'V':  'bg-green-400 text-green-900 dark:bg-green-700 dark:text-green-100',
+            'L':  'bg-green-300 text-green-900 dark:bg-green-800 dark:text-green-200',
+            'IV': 'bg-yellow-300 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-200',
+            'AP': 'bg-teal-300 text-teal-900 dark:bg-teal-800 dark:text-teal-100',
+            'Sede': 'bg-purple-200 text-purple-900 dark:bg-purple-900 dark:text-purple-200'
         };
 
         // --- 3. AUTENTICACIÓN Y FIREBASE ---
@@ -386,6 +414,7 @@
             actualizarGlobal();
             actualizarEstadisticas(anio);
             comprobarAlertaVacaciones(anio);
+            actualizarTextosFab();
         }
 
         function comprobarAlertaVacaciones(anio) {
@@ -446,12 +475,19 @@
                 let clases = 'h-14 rounded-2xl text-xs relative flex flex-col items-center justify-center shadow-sm transition-all ';
                 const isWeekend = fObj.getDay() === 0 || fObj.getDay() === 6;
 
-                if(data.turno || data.guardia) {
-                    if(data.turno) clases += (estilosT[data.turno.tipo] || 'bg-purple-100 text-purple-800');
-                    else clases += 'bg-orange-100 text-orange-800';
+                // Lógica mejorada de color del grid para soportar Festivos (F)
+                if(data.turno) {
+                    clases += (estilosT[data.turno.tipo] || 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white ');
+                } else if (data.guardia) {
+                    if (data.guardia.subtipo === 'F') {
+                        clases += 'bg-green-200 text-green-900 dark:bg-green-900 dark:text-green-200 '; // Igual que el botón Festivo
+                    } else {
+                        clases += 'bg-red-100 text-red-900 dark:bg-red-900 dark:text-red-200 ';
+                    }
                 } else {
-                    clases += isWeekend ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300' : 'bg-white dark:bg-gray-700';
+                    clases += isWeekend ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 ' : 'bg-white dark:bg-gray-700 ';
                 }
+
                 if(fObj < hoy) clases += ' dia-pasado';
                 if(fObj.getTime() === hoy.getTime()) clases += ' ring-4 ring-blue-500/30 border-blue-500 dark:border-blue-400 border-2';
                 if(diasSeleccionados.has(fStr)) clases += ' dia-seleccionado-multi';
@@ -459,26 +495,31 @@
                 btn.className = clases;
                 btn.dataset.fstr = fStr;
                 btn.innerHTML = `<span class="${(data.turno||data.guardia)?'absolute top-1.5 left-2 text-[9px]':''} font-bold">${i}</span>`;
+                
                 if(data.turno) btn.innerHTML += `<span class="font-black mt-1 text-[10px] leading-none uppercase tracking-tighter">${data.turno.subtipo || data.turno.tipo}</span>`;
                 if(data.guardia) {
-                    btn.innerHTML += `<span class="text-[8px] bg-white/60 dark:bg-black/20 px-1 rounded-md mt-1 font-black text-red-700 dark:text-red-400">${data.guardia.subtipo}</span>`;
+                    btn.innerHTML += `<span class="text-[8px] bg-white/60 dark:bg-black/20 px-1 rounded-md mt-1 font-black text-red-700 dark:text-red-400 shadow-sm">${data.guardia.subtipo}</span>`;
                     totalMesRender += (data.guardia.precio || 0);
                 }
                 if(data.nota) btn.innerHTML += `<span class="absolute top-1.5 right-2 w-1.5 h-1.5 bg-red-500 rounded-full shadow-sm"></span>`;
+                
+                // Horas con "píldoras" de fondo para garantizar lectura sin importar el color del turno
                 if(data.horasExtras) {
-                    const colorH = data.horasExtras > 0 ? 'text-green-600' : 'text-blue-600';
-                    btn.innerHTML += `<span class="absolute bottom-1 right-2 text-[8px] font-black ${colorH}">${data.horasExtras > 0 ? '+':''}${data.horasExtras}h</span>`;
+                    const colorH = data.horasExtras > 0 ? 'text-green-700 dark:text-green-300' : 'text-blue-700 dark:text-blue-300';
+                    btn.innerHTML += `<span class="absolute bottom-1 right-1 text-[8px] font-black ${colorH} bg-white/80 dark:bg-black/40 px-1 rounded-md shadow-sm">${data.horasExtras > 0 ? '+':''}${data.horasExtras}h</span>`;
+                }
+                if(data.horasAP && data.horasAP < 8) {
+                    btn.innerHTML += `<span class="absolute bottom-1 left-1 text-[8px] font-black text-teal-800 dark:text-teal-200 bg-white/80 dark:bg-black/40 px-1 rounded-md shadow-sm">${data.horasAP}h AP</span>`;
                 }
 
                 btn.onclick = () => {
                     if(soloLectura) {
-                        const icon = document.getElementById('btn-toggle-candado');
-                        icon.classList.add('scale-150', 'bg-red-200');
-                        setTimeout(() => icon.classList.remove('scale-150', 'bg-red-200'), 300);
+                        const icon = document.getElementById('btn-toggle-candado-fab');
+                        icon.classList.add('bg-red-200');
+                        setTimeout(() => icon.classList.remove('bg-red-200'), 300);
                         return;
                     }
                     if(modoMultiSelect) {
-                        // MODO SELECCIÓN MÚLTIPLE
                         if(diasSeleccionados.has(fStr)) {
                             diasSeleccionados.delete(fStr);
                             btn.classList.remove('dia-seleccionado-multi');
@@ -489,19 +530,24 @@
                         document.getElementById('count-seleccionados').textContent = diasSeleccionados.size;
                         return;
                     }
-                    // MODO NORMAL
-                    diaSeleccionadoStr = fStr; botonDiaRef = btn; mesSeleccionadoData = {anio, mes, fObj};
+                    
+                    // Preparación del modal en edición simple
+                    diaSeleccionadoStr = fStr; 
+                    mesSeleccionadoData = {anio, mes, fObj};
                     document.getElementById('titulo-modal').textContent = `${i} de ${nombre}`;
-                    document.getElementById('subtitulo-modal-diasemana').textContent = diasSemana[fObj.getDay()];
                     document.getElementById('input-nota').value = data.nota || '';
                     document.getElementById('count-horas-dia').textContent = data.horasExtras || 0;
-                    document.getElementById('seccion-nota-horas').classList.remove('hidden'); // Asegurar visible
+                    document.getElementById('count-ap-dia').textContent = data.horasAP || 0;
+                    document.getElementById('seccion-nota-horas').classList.remove('hidden');
+                    
+                    // Verificación de estado de horas de Asuntos Propios
+                    checkAPState(data.horasAP || 0);
+                    
                     document.getElementById('modal-turno').classList.remove('hidden');
                 };
                 grid.appendChild(btn);
             }
 
-            // Nota de mes
             const notaWrap = document.createElement('div');
             notaWrap.className = 'mt-3';
             const notaInput = document.createElement('input');
@@ -531,7 +577,7 @@
         }
 
         function actualizarEstadisticas(anio) {
-            let v=0, ap=0, hTotal=0;
+            let v=0, apHoras=0, hTotal=0;
             const guardiasConteo = {};
             const guardiasPorMes = Array(12).fill(0);
             const horasPorMes = Array(12).fill(0);
@@ -541,7 +587,9 @@
                     const d = datosGuardias[fecha];
                     const mesIdx = parseInt(fecha.split('-')[1]) - 1;
                     if(d.turno?.tipo === 'V') v++;
-                    if(d.turno?.tipo === 'AP') ap++;
+                    if(d.turno?.tipo === 'AP' || d.horasAP === 8) apHoras += 8;
+                    else if (d.horasAP) apHoras += d.horasAP;
+                    
                     if(d.horasExtras) { hTotal += d.horasExtras; horasPorMes[mesIdx] += d.horasExtras; }
                     if(d.guardia) {
                         guardiasConteo[d.guardia.subtipo] = (guardiasConteo[d.guardia.subtipo] || 0) + 1;
@@ -556,8 +604,10 @@
             document.getElementById('count-v').textContent = v;
             document.getElementById('display-base-v').textContent = baseV;
             document.getElementById('input-base-v').value = baseV;
-            document.getElementById('count-ap').textContent = ap;
-            document.getElementById('display-base-ap').textContent = baseAP;
+            
+            // Asuntos Propios siempre se muestran en horas
+            document.getElementById('count-ap').textContent = apHoras;
+            document.getElementById('display-base-ap').textContent = baseAP * 8; 
             document.getElementById('input-base-ap').value = baseAP;
 
             const elH = document.getElementById('total-horas-global');
@@ -596,10 +646,7 @@
             if(chartGuardias) chartGuardias.destroy();
             chartGuardias = new Chart(ctxG, {
                 type: 'bar',
-                data: {
-                    labels: meses,
-                    datasets: [{ data: guardiasPorMes, backgroundColor: '#f87171', borderRadius: 6 }]
-                },
+                data: { labels: meses, datasets: [{ data: guardiasPorMes, backgroundColor: '#f87171', borderRadius: 6 }] },
                 options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:labelColor,font:{size:10}}}, y:{ticks:{color:labelColor,font:{size:10}},beginAtZero:true,grid:{color:isDark?'#374151':'#e5e7eb'}} }, animation:{duration:300} }
             });
 
@@ -613,10 +660,7 @@
             if(chartComparativa) chartComparativa.destroy();
             chartComparativa = new Chart(ctxC, {
                 type: 'bar',
-                data: {
-                    labels: anios.map(String),
-                    datasets: [{ data: dataComparativa, backgroundColor: ['#60a5fa','#34d399'], borderRadius: 8 }]
-                },
+                data: { labels: anios.map(String), datasets: [{ data: dataComparativa, backgroundColor: ['#60a5fa','#34d399'], borderRadius: 8 }] },
                 options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:labelColor}}, y:{ticks:{color:labelColor},beginAtZero:true,grid:{color:isDark?'#374151':'#e5e7eb'}} }, animation:{duration:300} }
             });
 
@@ -624,31 +668,46 @@
             if(chartHoras) chartHoras.destroy();
             chartHoras = new Chart(ctxH, {
                 type: 'bar',
-                data: {
-                    labels: meses,
-                    datasets: [{ data: horasPorMes, backgroundColor: horasPorMes.map(h => h >= 0 ? '#34d399' : '#f87171'), borderRadius: 6 }]
-                },
+                data: { labels: meses, datasets: [{ data: horasPorMes, backgroundColor: horasPorMes.map(h => h >= 0 ? '#34d399' : '#f87171'), borderRadius: 6 }] },
                 options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:labelColor,font:{size:10}}}, y:{ticks:{color:labelColor,font:{size:10}},grid:{color:isDark?'#374151':'#e5e7eb'}} }, animation:{duration:300} }
             });
         }
 
-        // --- 5. LÓGICA UNIFICADA DE EDICIÓN ---
+        // --- 5. LÓGICA UNIFICADA DE EDICIÓN Y AAPP ---
+        function checkAPState(val) {
+            const disableOthers = (val === 8);
+            const vistaBotones = document.querySelectorAll('#vista-principal .opcion-turno, #btn-menu-guardias, #btn-menu-sedes');
+            vistaBotones.forEach(btn => {
+                if(btn.dataset.categoria !== 'borrar') {
+                    btn.disabled = disableOthers;
+                    btn.style.opacity = disableOthers ? 0.3 : 1;
+                    btn.style.cursor = disableOthers ? 'not-allowed' : 'pointer';
+                }
+            });
+            if(disableOthers) {
+                document.getElementById('subtitulo-modal-diasemana').innerHTML = '<span class="text-teal-600 dark:text-teal-400 tracking-tight">8H AP — DÍA ASIGNADO AAPP</span>';
+            } else {
+                if(modoMultiSelect) {
+                    document.getElementById('subtitulo-modal-diasemana').textContent = "SELECCIÓN MÚLTIPLE";
+                } else if(mesSeleccionadoData) {
+                    document.getElementById('subtitulo-modal-diasemana').textContent = diasSemana[mesSeleccionadoData.fObj.getDay()];
+                }
+            }
+        }
+
         function aplicarCambioAFechas(accion) {
             if (modoMultiSelect && diasSeleccionados.size > 0) {
-                // Aplicar a todos los días seleccionados
                 diasSeleccionados.forEach(fStr => accion(fStr));
                 guardarTodo();
                 
-                // Limpiar y resetear modo
                 document.getElementById('modal-turno').classList.add('hidden');
                 modoMultiSelect = false;
                 diasSeleccionados.clear();
                 bannerMulti.classList.add('hidden');
                 bannerMulti.classList.remove('flex');
-                document.getElementById('btn-multi-select').classList.remove('bg-blue-400','text-white');
+                actualizarTextosFab();
                 cargarAnio(parseInt(selectAnio.value));
             } else {
-                // Modo normal (un solo día)
                 accion(diaSeleccionadoStr);
                 finalizarEdicion();
             }
@@ -659,7 +718,7 @@
                 const cat = btn.dataset.categoria;
                 aplicarCambioAFechas((fStr) => {
                     let d = datosGuardias[fStr] || {};
-                    if(cat === 'borrar') d = {}; // Borra todo
+                    if(cat === 'borrar') d = {}; 
                     else if(cat === 'turno') {
                         if(btn.dataset.tipo === 'ninguno') delete d.turno;
                         else d.turno = { tipo: btn.dataset.tipo, subtipo: btn.dataset.subtipo || null };
@@ -673,13 +732,24 @@
         });
 
         function finalizarEdicion() {
-            // Nota y horas solo se aplican en edición simple
             if (!modoMultiSelect && diaSeleccionadoStr) {
                 const d = datosGuardias[diaSeleccionadoStr] || {};
                 d.nota = document.getElementById('input-nota').value.trim();
                 d.horasExtras = parseFloat(document.getElementById('count-horas-dia').textContent) || 0;
-                if(!d.turno && !d.guardia && !d.nota && !d.horasExtras) delete datosGuardias[diaSeleccionadoStr];
-                else datosGuardias[diaSeleccionadoStr] = d;
+                d.horasAP = parseInt(document.getElementById('count-ap-dia').textContent) || 0;
+                
+                if (d.horasAP === 8) {
+                    d.turno = { tipo: 'AP', subtipo: null };
+                    delete d.guardia; 
+                } else if (d.turno && d.turno.tipo === 'AP' && d.horasAP < 8) {
+                    delete d.turno; 
+                }
+
+                if(!d.turno && !d.guardia && !d.nota && !d.horasExtras && !d.horasAP) {
+                    delete datosGuardias[diaSeleccionadoStr];
+                } else {
+                    datosGuardias[diaSeleccionadoStr] = d;
+                }
             }
             guardarTodo();
             document.getElementById('modal-turno').classList.add('hidden');
@@ -699,18 +769,22 @@
             c.textContent = (parseFloat(c.textContent)-0.5).toFixed(1).replace('.0','');
         };
 
-        document.getElementById('btn-abrir-stats').onclick = () => {
-            document.getElementById('modal-stats').classList.remove('hidden');
-            actualizarEstadisticas(parseInt(selectAnio.value));
+        // Controles de Asuntos Propios (Sumar/Restar de 2 en 2)
+        document.getElementById('btn-sumar-ap-dia').onclick = () => {
+            let val = parseInt(document.getElementById('count-ap-dia').textContent) || 0;
+            if(val < 8) val += 2;
+            document.getElementById('count-ap-dia').textContent = val;
+            checkAPState(val);
         };
+        document.getElementById('btn-restar-ap-dia').onclick = () => {
+            let val = parseInt(document.getElementById('count-ap-dia').textContent) || 0;
+            if(val > 0) val -= 2;
+            document.getElementById('count-ap-dia').textContent = val;
+            checkAPState(val);
+        };
+
         document.getElementById('btn-cerrar-stats').onclick = () => document.getElementById('modal-stats').classList.add('hidden');
         document.getElementById('btn-cerrar-modal').onclick = () => document.getElementById('modal-turno').classList.add('hidden');
-
-        document.getElementById('btn-toggle-candado').onclick = (e) => {
-            soloLectura = !soloLectura;
-            localStorage.setItem('soloLectura', soloLectura);
-            e.target.textContent = soloLectura ? '🔒':'🔓';
-        };
 
         document.getElementById('btn-toggle-dinero').onclick = () => {
             ocultarDinero = !ocultarDinero;
@@ -718,17 +792,16 @@
             cargarAnio(parseInt(selectAnio.value));
         };
 
-        // Submenús
+        // Submenús Modales
         document.getElementById('btn-menu-guardias').onclick = () => { document.getElementById('vista-principal').classList.add('hidden'); document.getElementById('vista-guardias').classList.remove('hidden'); };
         document.getElementById('btn-volver-principal').onclick = () => { document.getElementById('vista-principal').classList.remove('hidden'); document.getElementById('vista-guardias').classList.add('hidden'); };
         document.getElementById('btn-menu-sedes').onclick = () => { document.getElementById('vista-principal').classList.add('hidden'); document.getElementById('vista-sedes').classList.remove('hidden'); };
         document.getElementById('btn-volver-principal-sedes').onclick = () => { document.getElementById('vista-principal').classList.remove('hidden'); document.getElementById('vista-sedes').classList.add('hidden'); };
 
-        // Grid Guardias
         const gGrid = document.getElementById('grid-guardias');
         Object.entries(preciosG).sort().forEach(([k,v]) => {
             const b = document.createElement('button');
-            b.className = 'p-3 bg-red-50 dark:bg-red-900/30 text-[10px] font-black rounded-2xl border border-red-100 dark:border-red-800 shadow-sm uppercase';
+            b.className = 'p-3 bg-red-100 dark:bg-red-900/40 text-red-900 dark:text-red-100 text-[10px] font-black rounded-2xl border border-red-200 dark:border-red-800 shadow-sm uppercase';
             b.textContent = k;
             b.onclick = () => {
                 aplicarCambioAFechas((fStr) => {
@@ -738,11 +811,10 @@
             gGrid.appendChild(b);
         });
 
-        // Grid Sedes
         const sGrid = document.getElementById('grid-sedes');
         sedesDefinidas.forEach(s => {
             const b = document.createElement('button');
-            b.className = 'p-3 bg-purple-50 dark:bg-purple-900/30 text-[10px] font-black rounded-2xl border border-purple-100 dark:border-purple-800 shadow-sm uppercase leading-tight';
+            b.className = 'p-3 bg-purple-100 dark:bg-purple-900/40 text-purple-900 dark:text-purple-100 text-[10px] font-black rounded-2xl border border-purple-200 dark:border-purple-800 shadow-sm uppercase leading-tight';
             b.innerHTML = `<span>${s.nombre}</span><br><span class="text-[8px] opacity-40">${s.sub}</span>`;
             b.onclick = () => {
                 aplicarCambioAFechas((fStr) => {
@@ -752,7 +824,6 @@
             sGrid.appendChild(b);
         });
 
-        // Stats inputs
         document.getElementById('input-base-v').oninput = () => {
             basesAnuales[parseInt(selectAnio.value)] = { v: parseInt(document.getElementById('input-base-v').value) || 22, ap: parseInt(document.getElementById('input-base-ap').value) || 6 };
             guardarTodo(); actualizarEstadisticas(parseInt(selectAnio.value));
@@ -760,32 +831,20 @@
         document.getElementById('input-base-ap').oninput = document.getElementById('input-base-v').oninput;
 
         // --- 6. MODO SELECCIÓN MÚLTIPLE ---
-        document.getElementById('btn-multi-select').onclick = () => {
-            modoMultiSelect = !modoMultiSelect;
-            diasSeleccionados.clear();
-            document.getElementById('count-seleccionados').textContent = '0';
-            bannerMulti.classList.toggle('hidden', !modoMultiSelect);
-            bannerMulti.classList.toggle('flex', modoMultiSelect);
-            document.getElementById('btn-multi-select').classList.toggle('bg-blue-400', modoMultiSelect);
-            document.getElementById('btn-multi-select').classList.toggle('text-white', modoMultiSelect);
-            cargarAnio(parseInt(selectAnio.value));
-        };
-
         document.getElementById('btn-cancelar-multi').onclick = () => {
             modoMultiSelect = false;
             diasSeleccionados.clear();
             bannerMulti.classList.add('hidden');
             bannerMulti.classList.remove('flex');
-            document.getElementById('btn-multi-select').classList.remove('bg-blue-400','text-white');
+            actualizarTextosFab();
             cargarAnio(parseInt(selectAnio.value));
         };
 
-        // Redirigir botón APLICAR al modal principal (con ligeros ajustes)
         document.getElementById('btn-aplicar-multi').onclick = () => {
             if(diasSeleccionados.size === 0) return;
+            checkAPState(0); 
             document.getElementById('titulo-modal').textContent = `Aplicar a ${diasSeleccionados.size} días`;
-            document.getElementById('subtitulo-modal-diasemana').textContent = "SELECCIÓN MÚLTIPLE";
-            document.getElementById('seccion-nota-horas').classList.add('hidden'); // Ocultar notas para multiselección
+            document.getElementById('seccion-nota-horas').classList.add('hidden'); 
             
             document.getElementById('modal-turno').classList.remove('hidden');
             document.getElementById('vista-principal').classList.remove('hidden');
@@ -799,23 +858,31 @@
         
         btnFabMain.onclick = () => fabMenu.classList.toggle('hidden');
 
-        // Cerrar menú al hacer clic fuera
         document.addEventListener('click', (e) => {
             if (!btnFabMain.contains(e.target) && !fabMenu.contains(e.target)) {
                 fabMenu.classList.add('hidden');
             }
         });
 
-        // Actualizar texto del tema
-        const actualizarTextoTema = () => {
+        const actualizarTextosFab = () => {
             const esOscuro = document.documentElement.classList.contains('dark');
             document.getElementById('texto-tema').textContent = esOscuro ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+            document.getElementById('texto-candado').textContent = soloLectura ? '🔒 Editar Cuadrante' : '🔓 Bloquear para Leer';
+            
+            const btnMulti = document.getElementById('btn-multi-select-fab');
+            if (modoMultiSelect) {
+                btnMulti.classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400');
+                document.getElementById('texto-multi').textContent = '☑️ Cancelar Selección';
+            } else {
+                btnMulti.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400');
+                document.getElementById('texto-multi').textContent = '☑️ Selec. Múltiple';
+            }
         };
 
         document.getElementById('btn-tema').onclick = () => {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-            actualizarTextoTema();
+            actualizarTextosFab();
             fabMenu.classList.add('hidden');
         };
 
@@ -826,6 +893,30 @@
                 const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`);
                 if(el) el.scrollIntoView({behavior:'smooth', block: 'start'});
             }, 100);
+            fabMenu.classList.add('hidden');
+        };
+        
+        document.getElementById('btn-abrir-stats-fab').onclick = () => {
+            document.getElementById('modal-stats').classList.remove('hidden');
+            actualizarEstadisticas(parseInt(selectAnio.value));
+            fabMenu.classList.add('hidden');
+        };
+
+        document.getElementById('btn-toggle-candado-fab').onclick = () => {
+            soloLectura = !soloLectura;
+            localStorage.setItem('soloLectura', soloLectura);
+            actualizarTextosFab();
+            fabMenu.classList.add('hidden');
+        };
+
+        document.getElementById('btn-multi-select-fab').onclick = () => {
+            modoMultiSelect = !modoMultiSelect;
+            diasSeleccionados.clear();
+            document.getElementById('count-seleccionados').textContent = '0';
+            bannerMulti.classList.toggle('hidden', !modoMultiSelect);
+            bannerMulti.classList.toggle('flex', modoMultiSelect);
+            actualizarTextosFab();
+            cargarAnio(parseInt(selectAnio.value));
             fabMenu.classList.add('hidden');
         };
 
@@ -845,7 +936,7 @@
 
         selectAnio.onchange = () => cargarAnio(parseInt(selectAnio.value));
         if(localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
-        actualizarTextoTema();
+        actualizarTextosFab();
         
     </script>
 </body>
