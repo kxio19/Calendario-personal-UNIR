@@ -26,6 +26,17 @@
 </head>
 <body class="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans min-h-screen pb-10 transition-colors duration-300">
 
+    <!-- PANTALLA DE LOGIN -->
+    <div id="pantalla-login" class="fixed inset-0 bg-gray-50 dark:bg-gray-900 z-[100] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
+        <div class="text-6xl mb-6 shadow-sm rounded-full bg-white dark:bg-gray-800 p-4">📅</div>
+        <h1 class="text-4xl font-black text-gray-800 dark:text-white mb-2 tracking-tight">Mis Guardias</h1>
+        <p class="text-gray-500 dark:text-gray-400 mb-10 max-w-xs text-sm">Inicia sesión para tener tu propio calendario privado y sincronizarlo en la nube.</p>
+        <button id="btn-login-google" class="flex items-center justify-center gap-3 bg-white text-gray-700 font-black px-6 py-4 rounded-3xl shadow-xl active:scale-95 transition-all w-full max-w-xs border border-gray-100 dark:border-none">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6" alt="Google">
+            Entrar con Google
+        </button>
+    </div>
+
     <!-- CABECERA PRINCIPAL -->
     <header class="bg-gray-50 dark:bg-gray-800 shadow-sm sticky top-0 z-30 transition-colors duration-300">
         <div class="max-w-md mx-auto p-4 flex justify-between items-center gap-2">
@@ -39,13 +50,14 @@
                 <span id="alerta-vacaciones" class="hidden text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200 font-black alerta-vacaciones">⚠️ Pocos días V</span>
             </div>
             <div class="flex items-center gap-2">
-                <!-- Botón modo selección múltiple -->
+                <!-- Botones acciones -->
                 <button id="btn-multi-select" class="p-2 rounded-xl text-lg font-bold shadow-sm transition-all active:scale-95 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100" title="Selección múltiple">☑️</button>
                 <button id="btn-toggle-candado" class="p-2 rounded-xl text-lg font-bold shadow-sm transition-all active:scale-95 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">🔓</button>
                 <button id="btn-abrir-stats" class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 p-2 rounded-xl text-lg font-bold shadow-sm transition-colors active:scale-95">📊</button>
                 <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-3 py-2 rounded-xl text-sm font-black shadow-sm flex items-center gap-1 active:scale-95">
                     <span id="total-global">0 €</span> <span id="icono-ojo" class="ml-1 opacity-70 text-xs">👁️</span>
                 </button>
+                <button id="btn-logout" class="p-2 rounded-xl text-lg font-bold shadow-sm transition-all active:scale-95 bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400" title="Cerrar sesión">🚪</button>
             </div>
         </div>
         <!-- Banner modo selección múltiple -->
@@ -219,6 +231,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { initializeFirestore, persistentLocalCache, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // --- 1. CONFIGURACIÓN FIREBASE ---
         let firebaseConfig = {
@@ -232,24 +245,25 @@
         if (typeof __firebase_config !== 'undefined') firebaseConfig = JSON.parse(__firebase_config);
 
         const app = initializeApp(firebaseConfig);
-        
-        // Cargar base de datos CON soporte para disco duro (Offline real)
-        const db = initializeFirestore(app, {
-            localCache: persistentLocalCache()
-        });
+        const db = initializeFirestore(app, { localCache: persistentLocalCache() });
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
         // --- 2. VARIABLES DE ESTADO ---
         let datosGuardias = {};
         let basesAnuales = {};
         let horasExtrasPorAnio = {};
-        let notasMes = {};                    // NUEVO: notas por mes
+        let notasMes = {};                    
         let diaSeleccionadoStr = null;
         let botonDiaRef = null;
         let mesSeleccionadoData = null;
         let soloLectura = localStorage.getItem('soloLectura') === 'true';
         let ocultarDinero = localStorage.getItem('ocultarDinero') === 'true';
-        let modoMultiSelect = false;          // NUEVO: modo selección múltiple
-        let diasSeleccionados = new Set();    // NUEVO: días marcados
+        let modoMultiSelect = false;          
+        let diasSeleccionados = new Set();    
+        
+        let currentUserId = null;
+        let unsubscribeSnapshot = null;
 
         const cloudStatus = document.getElementById('cloud-status');
         const contenedorMeses = document.getElementById('contenedor-meses');
@@ -277,9 +291,42 @@
             'Sede': 'bg-purple-100 text-purple-800'
         };
 
-        // --- 3. FIREBASE ---
-        const USER_ID = 'usuario-principal';
-        const docRef = doc(db, 'mis-guardias', USER_ID, 'appData', 'estado');
+        // --- 3. AUTENTICACIÓN Y FIREBASE ---
+        const pantallaLogin = document.getElementById('pantalla-login');
+        
+        document.getElementById('btn-login-google').onclick = async () => {
+            try { await signInWithPopup(auth, provider); } 
+            catch (error) { console.error("Error login:", error); }
+        };
+
+        document.getElementById('btn-logout').onclick = () => {
+            signOut(auth);
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                // Ocultar pantalla de login con transición
+                pantallaLogin.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => pantallaLogin.classList.add('hidden'), 500);
+                
+                iniciarSincronizacion(currentUserId);
+            } else {
+                currentUserId = null;
+                // Mostrar pantalla de login
+                pantallaLogin.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+                
+                if(unsubscribeSnapshot) { 
+                    unsubscribeSnapshot(); 
+                    unsubscribeSnapshot = null; 
+                }
+                
+                // Limpiar datos visualmente al salir
+                datosGuardias = {}; basesAnuales = {}; horasExtrasPorAnio = {}; notasMes = {};
+                cargarAnio(parseInt(selectAnio.value)); 
+            }
+        });
+
         cloudStatus.classList.remove('hidden');
         cloudStatus.classList.add('flex');
 
@@ -293,26 +340,32 @@
 
         let guardandoNotaMes = false;
 
-        onSnapshot(docRef, (snap) => {
-            if (snap.exists()) {
-                const d = snap.data();
-                datosGuardias = d.guardias || {};
-                basesAnuales = d.bases || {};
-                horasExtrasPorAnio = d.horas || {};
-                notasMes = d.notasMes || {};
-                if (!guardandoNotaMes) {
-                    cargarAnio(parseInt(selectAnio.value));
+        function iniciarSincronizacion(uid) {
+            const docRef = doc(db, 'mis-guardias', uid, 'appData', 'estado');
+            
+            unsubscribeSnapshot = onSnapshot(docRef, (snap) => {
+                if (snap.exists()) {
+                    const d = snap.data();
+                    datosGuardias = d.guardias || {};
+                    basesAnuales = d.bases || {};
+                    horasExtrasPorAnio = d.horas || {};
+                    notasMes = d.notasMes || {};
+                    if (!guardandoNotaMes) {
+                        cargarAnio(parseInt(selectAnio.value));
+                    }
+                    setCloudStatus('ok');
+                } else {
+                    guardarTodo();
                 }
-                setCloudStatus('ok');
-            } else {
-                guardarTodo();
-            }
-        }, (err) => {
-            console.error("Error al sincronizar:", err);
-            setCloudStatus('error');
-        });
+            }, (err) => {
+                console.error("Error al sincronizar:", err);
+                setCloudStatus('error');
+            });
+        }
 
         async function guardarTodo(esNotaMes = false) {
+            if (!currentUserId) return; // Protección extra
+            const docRef = doc(db, 'mis-guardias', currentUserId, 'appData', 'estado');
             guardandoNotaMes = esNotaMes;
             setCloudStatus('guardando');
             try {
@@ -788,18 +841,18 @@
             });
         }
 
+        // --- 8. REGISTRO SERVICE WORKER PWA ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('PWA lista y Service Worker registrado', reg))
+                    .catch(err => console.warn('Error al registrar PWA', err));
+            });
+        }
+
         selectAnio.onchange = () => cargarAnio(parseInt(selectAnio.value));
         if(localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
-        cargarAnio(hoy.getFullYear());
         
-        // Registrar el Service Worker para que sea una PWA instalable
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('PWA lista y Service Worker registrado', reg))
-            .catch(err => console.warn('Error al registrar PWA', err));
-        });
-      }
     </script>
 </body>
 </html>
