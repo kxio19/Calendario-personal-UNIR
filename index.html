@@ -8,9 +8,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         body { -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation; }
@@ -20,19 +19,21 @@
         @keyframes pulse-soft { 0%,100%{opacity:1} 50%{opacity:0.6} }
         .pulsing { animation: pulse-soft 1.2s infinite; }
         .alerta-vacaciones { animation: pulse-soft 2s infinite; }
+        .pildora-fondo { text-shadow: 0 0 2px rgba(0,0,0,0.8); background: rgba(0,0,0,0.15); padding: 0 4px; border-radius: 4px; }
     </style>
 </head>
 <body class="bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans min-h-screen pb-10 transition-colors duration-300">
 
     <!-- PANTALLA DE LOGIN -->
-    <div id="pantalla-login" class="fixed inset-0 bg-gray-50 dark:bg-gray-900 z-[100] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
-        <div class="text-6xl mb-6 shadow-sm rounded-full bg-white dark:bg-gray-800 p-4">📅</div>
-        <h1 class="text-4xl font-black text-gray-800 dark:text-white mb-2 tracking-tight">Mis Guardias</h1>
-        <p class="text-gray-500 dark:text-gray-400 mb-10 max-w-xs text-sm">Inicia sesión para tener tu propio calendario privado y sincronizarlo en la nube.</p>
-        <button id="btn-login-google" class="flex items-center justify-center gap-3 bg-white text-gray-700 font-black px-6 py-4 rounded-3xl shadow-xl active:scale-95 transition-all w-full max-w-xs border border-gray-100 dark:border-none">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6 h-6" alt="Google">
-            Entrar con Google
-        </button>
+    <div id="pantalla-login" class="fixed inset-0 bg-gray-50 dark:bg-gray-900 z-50 flex flex-col items-center justify-center p-6 transition-opacity duration-300">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-[2rem] shadow-2xl w-full max-w-sm text-center border dark:border-gray-700">
+            <h1 class="text-3xl font-black mb-2 dark:text-white">Mis Guardias</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mb-8 font-medium">Inicia sesión para acceder a tu cuadrante privado.</p>
+            <button id="btn-login" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <svg class="w-5 h-5 bg-white rounded-full p-0.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.58c2.1-1.93 3.31-4.78 3.31-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.58-2.77c-.98.66-2.23 1.06-3.7 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Entrar con Google
+            </button>
+        </div>
     </div>
 
     <!-- CABECERA PRINCIPAL (Minimalista) -->
@@ -43,58 +44,41 @@
                     <select id="select-anio" class="appearance-none bg-transparent text-xl font-black text-gray-800 dark:text-gray-100 focus:outline-none cursor-pointer pr-4"></select>
                     <span class="absolute right-0 top-1.5 text-xs pointer-events-none opacity-50">▼</span>
                 </div>
-                <span id="cloud-status" class="text-base w-8 h-8 rounded-full font-bold hidden items-center justify-center shadow-sm transition-colors duration-500">☁️</span>
-                <!-- Alerta vacaciones bajas -->
+                <span id="cloud-status" class="text-[10px] px-2 py-1 rounded-full font-bold hidden items-center justify-center shadow-sm transition-colors duration-500">☁️</span>
                 <span id="alerta-vacaciones" class="hidden text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200 font-black alerta-vacaciones">⚠️ Pocos días V</span>
             </div>
-            <div class="flex items-center">
-                <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-3 py-2 rounded-xl text-sm font-black shadow-sm flex items-center gap-1 active:scale-95">
-                    <span id="total-global">0 €</span> <span id="icono-ojo" class="ml-1 opacity-70 text-[10px]">👁️</span>
-                </button>
-            </div>
+            <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-3 py-1.5 rounded-xl text-sm font-black shadow-sm flex items-center gap-1 active:scale-95">
+                <span id="total-global">0 €</span> <span id="icono-ojo" class="ml-1 opacity-70 text-xs">👁️</span>
+            </button>
         </div>
         <!-- Banner modo selección múltiple -->
         <div id="banner-multi" class="hidden bg-blue-600 text-white text-xs font-black text-center py-2 px-4 flex items-center justify-between max-w-md mx-auto">
-            <span>☑️ SELECCIÓN MÚLTIPLE — <span id="count-seleccionados">0</span> días</span>
+            <span>☑️ MODO MÚLTIPLE — <span id="count-seleccionados">0</span> días</span>
             <div class="flex gap-2">
                 <button id="btn-aplicar-multi" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-black shadow-sm">APLICAR</button>
-                <button id="btn-cancelar-multi" class="opacity-70 px-2 py-1 rounded-lg font-black">✕</button>
+                <button id="btn-cancelar-multi" class="opacity-70 px-2 py-1 rounded-lg font-black border border-white/30">✕</button>
             </div>
         </div>
     </header>
 
-    <main id="contenedor-meses" class="max-w-md mx-auto p-4 space-y-6"></main>
+    <main id="contenedor-meses" class="max-w-md mx-auto p-4 space-y-6 hidden"></main>
 
-    <!-- BOTÓN FLOTANTE MENÚ (HAMBURGUESA Y OPCIONES) -->
-    <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
-        <div id="fab-menu" class="hidden flex flex-col gap-2 items-end mb-1">
-            <button id="btn-abrir-stats-fab" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span>📊 Estadísticas</span>
-            </button>
-            <button id="btn-multi-select-fab" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span id="texto-multi">☑️ Selec. Múltiple</span>
-            </button>
-            <button id="btn-toggle-candado-fab" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span id="texto-candado">🔓 Desbloqueado</span>
-            </button>
-            <button id="btn-tema" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span id="texto-tema">🌙 Modo Oscuro</span>
-            </button>
-            <button id="btn-hoy" class="flex items-center justify-start gap-3 w-48 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-gray-100 dark:border-gray-700">
-                <span>📅 Ir a Hoy</span>
-            </button>
-            <button id="btn-logout-fab" class="flex items-center justify-start gap-3 w-48 bg-red-50 dark:bg-red-900/80 text-red-600 dark:text-red-300 px-4 py-3 rounded-2xl shadow-lg font-black text-sm active:scale-95 transition-transform border border-red-100 dark:border-red-800 mt-2">
-                <span>🚪 Salir</span>
-            </button>
+    <!-- MENÚ FLOTANTE UNIFICADO (FAB) -->
+    <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-20 items-end hidden" id="fab-container">
+        <div id="menu-opciones" class="hidden flex-col gap-2 items-end mb-2">
+            <button id="btn-tema" class="px-4 py-2.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🌙 Modo Oscuro</button>
+            <button id="btn-hoy" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">📅 Ir a Hoy</button>
+            <button id="btn-multi-select" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2 border border-blue-100 dark:border-gray-600">☑️ Selección Múltiple</button>
+            <button id="btn-abrir-stats" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">📊 Estadísticas</button>
+            <button id="btn-toggle-candado" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🔓 Habilitar Edición</button>
+            <button id="btn-logout" class="px-4 py-2.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🚪 Salir</button>
         </div>
-        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
+        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-90 transition-transform">
+            <span id="icono-fab">🍔</span>
         </button>
     </div>
 
-    <!-- MODAL ESTADÍSTICAS -->
+    <!-- MODAL ESTADÍSTICAS (Sin gráficos) -->
     <div id="modal-stats" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4 backdrop-blur-sm transition-opacity">
         <div class="bg-gray-50 dark:bg-gray-800 w-full max-w-sm rounded-3xl p-6 shadow-2xl overflow-y-auto max-h-[90vh] border dark:border-gray-700">
             <div class="flex justify-between items-center mb-6">
@@ -104,19 +88,19 @@
             <div class="space-y-4">
                 <!-- Vacaciones -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
-                    <div><p class="font-bold dark:text-white text-xs opacity-60">Vacaciones (Días Base)</p><input type="number" id="input-base-v" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="22"></div>
+                    <div><p class="font-bold dark:text-white text-xs opacity-60">Vacaciones (V)</p><input type="number" id="input-base-v" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="22"></div>
                     <p class="text-xl font-black text-emerald-600"><span id="count-v">0</span> <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-v">22</span></p>
                 </div>
-                <!-- Asuntos propios -->
+                <!-- AAPP (Ahora por horas) -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
-                    <div><p class="font-bold dark:text-white text-xs opacity-60">Asuntos Propios (Días Base)</p><input type="number" id="input-base-ap" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="6"></div>
+                    <div><p class="font-bold dark:text-white text-xs opacity-60">AAPP (Días base)</p><input type="number" id="input-base-ap" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="6"></div>
                     <div class="text-right">
-                        <p class="text-xl font-black text-teal-600"><span id="count-ap">0</span>h <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-ap">48</span>h</p>
+                        <p class="text-xl font-black text-teal-600"><span id="count-ap-horas">0</span>h <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-ap-horas">48</span>h</p>
                     </div>
                 </div>
                 <!-- Horas extras -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
-                    <p class="font-bold dark:text-white text-sm">Balance Horas Extras</p>
+                    <p class="font-bold dark:text-white text-sm">Horas Extras</p>
                     <p class="text-xl font-black" id="total-horas-global">0h</p>
                 </div>
                 <!-- Resumen mes actual -->
@@ -128,25 +112,7 @@
                         <span>⏱️ <span id="horas-mes-actual">0h</span></span>
                     </div>
                 </div>
-                <!-- Gráficos ... -->
-                <div class="pt-2">
-                    <p class="text-[10px] font-black uppercase text-gray-400 mb-3 px-1">Guardias por mes</p>
-                    <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl border border-gray-100 dark:border-gray-600">
-                        <canvas id="chart-guardias-mes" height="120"></canvas>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="text-[10px] font-black uppercase text-gray-400 mb-3 px-1">Comparativa años</p>
-                    <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl border border-gray-100 dark:border-gray-600">
-                        <canvas id="chart-comparativa-anios" height="100"></canvas>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p class="text-[10px] font-black uppercase text-gray-400 mb-3 px-1">Horas extras por mes</p>
-                    <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl border border-gray-100 dark:border-gray-600">
-                        <canvas id="chart-horas-mes" height="100"></canvas>
-                    </div>
-                </div>
+                <!-- Desglose guardias -->
                 <div class="pt-2">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-2 px-1">Conteo de Guardias</p>
                     <div id="contenedor-desglose-guardias" class="grid grid-cols-2 gap-2 text-xs"></div>
@@ -155,85 +121,89 @@
         </div>
     </div>
 
-    <!-- MODAL EDICIÓN DÍA / SELECCIÓN MÚLTIPLE -->
-    <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-end sm:items-center justify-center z-40 p-4 backdrop-blur-sm">
-        <div class="bg-gray-50 dark:bg-gray-800 w-full max-w-md sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <!-- MODAL EDICIÓN / SELECCIÓN MÚLTIPLE UNIFICADO -->
+    <div id="modal-turno" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-end sm:items-center justify-center z-40 p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-gray-50 dark:bg-gray-800 w-full max-w-md sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto border dark:border-gray-700 relative">
             <div class="flex justify-between items-center mb-1">
                 <h3 id="titulo-modal" class="text-xl font-black dark:text-white tracking-tight">Día Seleccionado</h3>
-                <button id="btn-cerrar-modal" class="text-gray-400 text-4xl font-light">&times;</button>
+                <button id="btn-cerrar-modal" class="text-gray-400 text-4xl font-light leading-none">&times;</button>
             </div>
-            <!-- Día de la semana o info AP / Multiselección -->
-            <p id="subtitulo-modal-diasemana" class="text-xs font-black uppercase text-blue-500 mb-5 tracking-widest transition-all"></p>
+            <p id="subtitulo-modal-diasemana" class="text-xs font-black uppercase text-blue-500 mb-5 tracking-widest"></p>
 
-            <div id="vista-principal" class="grid grid-cols-2 gap-2 transition-opacity duration-300">
-                <!-- Escala Azules -->
-                <button class="opcion-turno p-4 rounded-2xl bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-blue-300 text-blue-900 dark:bg-blue-800 dark:text-blue-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M8">M8</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-blue-400 text-blue-900 dark:bg-blue-700 dark:text-blue-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M9">M9</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-blue-500 text-white dark:bg-blue-600 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="TT">TARDE</button>
+            <div id="vista-principal" class="grid grid-cols-2 gap-2 transition-opacity">
+                <!-- Columna Izquierda: M7, M8, M9, TARDE, SEDE... -->
+                <!-- Columna Derecha: GUARDIA..., LIBRANZA, FESTIVO, VACACIONES, INTENTO V. -->
                 
-                <!-- Escala Verdes -->
-                <button class="opcion-turno p-4 rounded-2xl bg-green-200 text-green-900 dark:bg-green-900 dark:text-green-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="guardia" data-subtipo="F" data-precio="150">FESTIVO</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-green-300 text-green-900 dark:bg-green-800 dark:text-green-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="L">LIBRANZA</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-green-400 text-green-900 dark:bg-green-700 dark:text-green-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="V">VACACIONES</button>
+                <!-- Fila 1 -->
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
+                <button id="btn-menu-guardias" class="p-4 rounded-2xl bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100 font-black text-sm shadow-sm active:scale-95 transition-transform">GUARDIA...</button>
+                
+                <!-- Fila 2 -->
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M8">M8</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="L">LIBRANZA</button>
 
-                <!-- Otros Colores Específicos -->
-                <button class="opcion-turno p-4 rounded-2xl bg-yellow-300 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-200 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="IV">INTENTO V.</button>
-                <button id="btn-menu-guardias" class="p-4 rounded-2xl bg-red-100 text-red-900 dark:bg-red-900 dark:text-red-200 font-black text-sm shadow-sm active:scale-95 transition-transform">GUARDIA...</button>
-                <button id="btn-menu-sedes" class="p-4 rounded-2xl bg-purple-200 text-purple-900 dark:bg-purple-900 dark:text-purple-200 font-black text-sm shadow-sm active:scale-95 transition-transform">SEDE...</button>
+                <!-- Fila 3 -->
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-300 dark:bg-blue-700 text-blue-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M9">M9</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-green-200 dark:bg-green-800 text-green-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="guardia" data-subtipo="F" data-precio="150">FESTIVO</button>
 
-                <!-- Botones Borrar (Advertencia) -->
+                <!-- Fila 4 -->
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-400 dark:bg-blue-600 text-blue-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="TT">TARDE</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-green-300 dark:bg-green-700 text-green-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="V">VACACIONES</button>
+
+                <!-- Fila 5 -->
+                <button id="btn-menu-sedes" class="p-4 rounded-2xl bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 font-black text-sm shadow-sm active:scale-95 transition-transform">SEDE...</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="IV">INTENTO V.</button>
+
+                <!-- Botones Borrar -->
                 <div class="col-span-2 grid grid-cols-3 gap-2 mt-6 pt-5 border-t dark:border-gray-700">
-                    <button class="opcion-turno p-2 rounded-xl bg-amber-400 text-amber-900 dark:bg-amber-700 dark:text-amber-100 text-[10px] font-black uppercase" data-categoria="turno" data-tipo="ninguno">Borrar Turno</button>
-                    <button class="opcion-turno p-2 rounded-xl bg-amber-400 text-amber-900 dark:bg-amber-700 dark:text-amber-100 text-[10px] font-black uppercase" data-categoria="guardia" data-subtipo="ninguno">Borrar Guardia</button>
-                    <button class="opcion-turno p-2 rounded-xl bg-red-500 text-white dark:bg-red-700 dark:text-white text-[10px] font-black uppercase" data-categoria="borrar">Borrar Todo</button>
+                    <button class="opcion-turno p-2 rounded-xl bg-amber-200 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 text-[10px] font-black uppercase" data-categoria="turno" data-tipo="ninguno">Borrar Turno</button>
+                    <button class="opcion-turno p-2 rounded-xl bg-amber-200 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 text-[10px] font-black uppercase" data-categoria="guardia" data-subtipo="ninguno">Borrar Guardia</button>
+                    <button class="opcion-turno p-2 rounded-xl bg-red-600 dark:bg-red-800 text-white text-[10px] font-black uppercase shadow-sm" data-categoria="borrar">Borrar Todo</button>
                 </div>
             </div>
 
-            <!-- Menú Guardias (Mantiene rojo) -->
+            <!-- Vistas Secundarias (Guardias/Sedes) -->
             <div id="vista-guardias" class="hidden">
-                <button id="btn-volver-principal" class="mb-4 text-sm font-black text-blue-600 flex items-center gap-1 uppercase tracking-tighter">← Volver a opciones</button>
+                <button id="btn-volver-principal" class="mb-4 text-sm font-black text-red-600 flex items-center gap-1 uppercase tracking-tighter">← Volver a opciones</button>
                 <div id="grid-guardias" class="grid grid-cols-3 gap-2"></div>
             </div>
-
-            <!-- Menú Sedes (Mantiene morado) -->
             <div id="vista-sedes" class="hidden">
                 <button id="btn-volver-principal-sedes" class="mb-4 text-sm font-black text-purple-600 flex items-center gap-1 uppercase tracking-tighter">← Volver a opciones</button>
                 <div id="grid-sedes" class="grid grid-cols-2 gap-2"></div>
             </div>
 
-            <!-- Sección nota + horas extra + horas AP -->
-            <div id="seccion-nota-horas" class="mt-8 pt-5 border-t dark:border-gray-700">
-                <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block">Nota Personalizada</label>
-                <input type="text" id="input-nota" class="w-full border-2 dark:border-gray-600 rounded-2xl p-4 bg-white dark:bg-gray-700 text-sm focus:ring-4 focus:ring-blue-500/20 outline-none transition-all shadow-inner" placeholder="Escribe algo para recordar...">
-                
-                <div class="mt-4 grid grid-cols-2 gap-2">
+            <!-- Sección Contadores y Nota (Oculta en Multi-select) -->
+            <div id="seccion-nota-horas" class="mt-6 pt-5 border-t dark:border-gray-700">
+                <div class="flex flex-col gap-3 mb-5">
                     <!-- Horas Extras -->
-                    <div class="flex flex-col items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border dark:border-gray-600">
-                        <span class="text-[10px] font-black uppercase opacity-40 mb-3 text-center w-full block">⏱️ Extras</span>
-                        <div class="flex items-center gap-3">
-                            <button id="btn-restar-hora-dia" class="w-9 h-9 rounded-xl bg-red-100 text-red-700 font-black text-xl active:scale-90 transition-transform shadow-sm">-</button>
+                    <div class="flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border border-gray-100 dark:border-gray-600">
+                        <span class="text-[11px] font-black uppercase opacity-60">⏱️ HORAS EXTRAS</span>
+                        <div class="flex items-center gap-4">
+                            <button id="btn-restar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90">-</button>
                             <span id="count-horas-dia" class="font-black text-lg w-8 text-center">0</span>
-                            <button id="btn-sumar-hora-dia" class="w-9 h-9 rounded-xl bg-green-100 text-green-700 font-black text-xl active:scale-90 transition-transform shadow-sm">+</button>
+                            <button id="btn-sumar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90">+</button>
                         </div>
                     </div>
-                    <!-- Horas Asuntos Propios -->
-                    <div class="flex flex-col items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border dark:border-gray-600">
-                        <span class="text-[10px] font-black uppercase opacity-40 mb-3 text-center w-full block text-teal-600 dark:text-teal-400">⏳ A. Propios</span>
-                        <div class="flex items-center gap-3">
-                            <button id="btn-restar-ap-dia" class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90 transition-transform shadow-sm">-</button>
-                            <span id="count-ap-dia" class="font-black text-lg w-8 text-center">0</span>
-                            <button id="btn-sumar-ap-dia" class="w-9 h-9 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90 transition-transform shadow-sm">+</button>
+                    <!-- AAPP -->
+                    <div class="flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border border-gray-100 dark:border-gray-600">
+                        <span class="text-[11px] font-black uppercase opacity-60">⏱️ AAPP</span>
+                        <div class="flex items-center gap-4">
+                            <button id="btn-restar-aapp-dia" class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90">-</button>
+                            <span id="count-aapp-dia" class="font-black text-lg w-8 text-center">0</span>
+                            <button id="btn-sumar-aapp-dia" class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90">+</button>
                         </div>
                     </div>
                 </div>
 
-                <button id="btn-guardar-nota" class="mt-5 w-full py-5 bg-blue-600 text-white rounded-3xl font-black shadow-xl active:scale-95 transition-transform uppercase tracking-widest">GUARDAR DÍA</button>
+                <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block ml-1">Nota Personalizada</label>
+                <input type="text" id="input-nota" class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl p-4 bg-white dark:bg-gray-700 text-sm focus:ring-4 focus:ring-blue-500/20 outline-none transition-all shadow-inner mb-6" placeholder="Escribe algo para recordar...">
+                
+                <button id="btn-guardar-nota" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black shadow-xl active:scale-95 transition-transform uppercase tracking-widest text-sm">GUARDAR DÍA</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL PROMPT SEDE PERSONALIZADA -->
+    <!-- MODAL NUEVA SEDE -->
     <div id="modal-prompt" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50 p-4 backdrop-blur-md">
         <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-8 w-full max-w-xs shadow-2xl border dark:border-gray-700">
             <h4 class="font-black text-lg mb-4 dark:text-white text-center">NUEVA SEDE</h4>
@@ -259,33 +229,29 @@
             messagingSenderId: "89547012478",
             appId: "1:89547012478:web:8f42ac1261f7bb39f4db2f"
         };
-        if (typeof __firebase_config !== 'undefined') firebaseConfig = JSON.parse(__firebase_config);
-
         const app = initializeApp(firebaseConfig);
         const db = initializeFirestore(app, { localCache: persistentLocalCache() });
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        let uidActual = null;
+        let unsubscribeSnap = null;
+
         // --- 2. VARIABLES DE ESTADO ---
         let datosGuardias = {};
         let basesAnuales = {};
-        let horasExtrasPorAnio = {};
-        let notasMes = {};                    
+        let notasMes = {};
         let diaSeleccionadoStr = null;
-        let mesSeleccionadoData = null;
         let soloLectura = localStorage.getItem('soloLectura') === 'true';
         let ocultarDinero = localStorage.getItem('ocultarDinero') === 'true';
-        let modoMultiSelect = false;          
-        let diasSeleccionados = new Set();    
-        
-        let currentUserId = null;
-        let unsubscribeSnapshot = null;
+        let modoMultiSelect = false;
+        let diasSeleccionados = new Set();
+        let guardandoNotaMes = false;
 
         const cloudStatus = document.getElementById('cloud-status');
         const contenedorMeses = document.getElementById('contenedor-meses');
         const selectAnio = document.getElementById('select-anio');
-        const bannerMulti = document.getElementById('banner-multi');
-        const alertaVacaciones = document.getElementById('alerta-vacaciones');
+        const fabMenu = document.getElementById('menu-opciones');
 
         const diasSemana = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 
@@ -300,100 +266,71 @@
             {nombre: 'Embajadores', sub: 'Emb.'}, {nombre: 'J. Camarillo 11', sub: 'J. Cam.'}
         ];
 
+        // Definición de colores para el grid (escala ajustada)
         const estilosT = {
-            'M7': 'bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-200',
-            'M8': 'bg-blue-300 text-blue-900 dark:bg-blue-800 dark:text-blue-200',
-            'M9': 'bg-blue-400 text-blue-900 dark:bg-blue-700 dark:text-blue-200',
-            'TT': 'bg-blue-500 text-white dark:bg-blue-600 dark:text-blue-100',
-            'V':  'bg-green-400 text-green-900 dark:bg-green-700 dark:text-green-100',
-            'L':  'bg-green-300 text-green-900 dark:bg-green-800 dark:text-green-200',
-            'IV': 'bg-yellow-300 text-yellow-900 dark:bg-yellow-800 dark:text-yellow-200',
-            'AP': 'bg-teal-300 text-teal-900 dark:bg-teal-800 dark:text-teal-100',
-            'Sede': 'bg-purple-200 text-purple-900 dark:bg-purple-900 dark:text-purple-200'
+            'M7':'bg-blue-100 text-blue-800 dark:bg-blue-900',
+            'M8':'bg-blue-200 text-blue-800 dark:bg-blue-800', 
+            'M9':'bg-blue-300 text-blue-900 dark:bg-blue-700',
+            'TT':'bg-blue-400 text-blue-900 dark:bg-blue-600', 
+            'V':'bg-green-300 text-green-900 dark:bg-green-700',
+            'L':'bg-green-100 text-green-800 dark:bg-green-900', 
+            'IV':'bg-amber-100 text-amber-800 dark:bg-amber-900',
+            'Sede': 'bg-purple-100 text-purple-800 dark:bg-purple-900'
         };
 
         // --- 3. AUTENTICACIÓN Y FIREBASE ---
-        const pantallaLogin = document.getElementById('pantalla-login');
-        
-        document.getElementById('btn-login-google').onclick = async () => {
-            try { await signInWithPopup(auth, provider); } 
-            catch (error) { console.error("Error login:", error); }
-        };
-
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                currentUserId = user.uid;
-                pantallaLogin.classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => pantallaLogin.classList.add('hidden'), 500);
-                iniciarSincronizacion(currentUserId);
+                uidActual = user.uid;
+                document.getElementById('pantalla-login').classList.add('opacity-0', 'pointer-events-none');
+                document.getElementById('contenedor-meses').classList.remove('hidden');
+                document.getElementById('fab-container').classList.remove('hidden');
+                cloudStatus.classList.remove('hidden');
+                cloudStatus.classList.add('flex');
+                iniciarSincronizacion();
             } else {
-                currentUserId = null;
-                pantallaLogin.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-                if(unsubscribeSnapshot) { 
-                    unsubscribeSnapshot(); 
-                    unsubscribeSnapshot = null; 
-                }
-                datosGuardias = {}; basesAnuales = {}; horasExtrasPorAnio = {}; notasMes = {};
-                cargarAnio(parseInt(selectAnio.value)); 
+                uidActual = null;
+                document.getElementById('pantalla-login').classList.remove('opacity-0', 'pointer-events-none');
+                document.getElementById('contenedor-meses').classList.add('hidden');
+                document.getElementById('fab-container').classList.add('hidden');
+                if(unsubscribeSnap) unsubscribeSnap();
             }
         });
 
-        cloudStatus.classList.remove('hidden');
-        cloudStatus.classList.add('flex');
+        document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('btn-logout').onclick = () => { fabMenu.classList.add('hidden'); signOut(auth); };
 
         function setCloudStatus(estado) {
-            cloudStatus.classList.remove('bg-yellow-300','bg-green-400','bg-red-400','bg-gray-300','dark:bg-yellow-500','dark:bg-green-600','dark:bg-red-600','pulsing');
-            if (estado === 'guardando') { cloudStatus.classList.add('bg-yellow-300','dark:bg-yellow-500','pulsing'); }
-            else if (estado === 'ok') { cloudStatus.classList.add('bg-green-400','dark:bg-green-600'); }
-            else { cloudStatus.classList.add('bg-red-400','dark:bg-red-600'); }
+            cloudStatus.textContent = estado === 'ok' ? '☁️ OK' : (estado === 'guardando' ? '☁️ ...' : '☁️ ERR');
+            cloudStatus.className = `text-[10px] px-2 py-1 rounded-full font-bold flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' : (estado==='guardando'?'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 pulsing':'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300')}`;
         }
-        setCloudStatus('guardando');
 
-        let guardandoNotaMes = false;
-
-        function iniciarSincronizacion(uid) {
-            const docRef = doc(db, 'mis-guardias', uid, 'appData', 'estado');
-            
-            unsubscribeSnapshot = onSnapshot(docRef, (snap) => {
+        function iniciarSincronizacion() {
+            setCloudStatus('guardando');
+            const docRef = doc(db, 'mis-guardias', uidActual, 'appData', 'estado');
+            unsubscribeSnap = onSnapshot(docRef, (snap) => {
                 if (snap.exists()) {
                     const d = snap.data();
                     datosGuardias = d.guardias || {};
                     basesAnuales = d.bases || {};
-                    horasExtrasPorAnio = d.horas || {};
                     notasMes = d.notasMes || {};
-                    if (!guardandoNotaMes) {
-                        cargarAnio(parseInt(selectAnio.value));
-                    }
+                    if (!guardandoNotaMes) cargarAnio(parseInt(selectAnio.value));
                     setCloudStatus('ok');
                 } else {
                     guardarTodo();
                 }
-            }, (err) => {
-                console.error("Error al sincronizar:", err);
-                setCloudStatus('error');
-            });
+            }, (err) => { setCloudStatus('error'); });
         }
 
         async function guardarTodo(esNotaMes = false) {
-            if (!currentUserId) return; 
-            const docRef = doc(db, 'mis-guardias', currentUserId, 'appData', 'estado');
+            if(!uidActual) return;
             guardandoNotaMes = esNotaMes;
             setCloudStatus('guardando');
             try {
-                await setDoc(docRef, {
-                    guardias: datosGuardias,
-                    bases: basesAnuales,
-                    horas: horasExtrasPorAnio,
-                    notasMes: notasMes,
-                    updatedAt: new Date().toISOString()
-                });
+                await setDoc(doc(db, 'mis-guardias', uidActual, 'appData', 'estado'), { guardias: datosGuardias, bases: basesAnuales, notasMes: notasMes, updatedAt: new Date().toISOString() });
                 setCloudStatus('ok');
-            } catch (err) {
-                console.error("Error al guardar:", err);
-                setCloudStatus('error');
-            } finally {
-                guardandoNotaMes = false;
-            }
+            } catch (err) { setCloudStatus('error'); }
+            finally { guardandoNotaMes = false; }
         }
 
         // --- 4. LÓGICA DE CALENDARIO ---
@@ -405,7 +342,6 @@
             selectAnio.appendChild(o);
         }
 
-        let chartGuardias = null, chartComparativa = null, chartHoras = null;
         let debounceNotaMes = null;
 
         function cargarAnio(anio) {
@@ -414,44 +350,26 @@
             actualizarGlobal();
             actualizarEstadisticas(anio);
             comprobarAlertaVacaciones(anio);
-            actualizarTextosFab();
         }
 
         function comprobarAlertaVacaciones(anio) {
             let v = 0;
-            Object.keys(datosGuardias).forEach(fecha => {
-                if(fecha.startsWith(anio) && datosGuardias[fecha].turno?.tipo === 'V') v++;
-            });
+            Object.keys(datosGuardias).forEach(fecha => { if(fecha.startsWith(anio) && datosGuardias[fecha].turno?.tipo === 'V') v++; });
             const base = basesAnuales[anio]?.v || 22;
             const restantes = base - v;
-            alertaVacaciones.classList.toggle('hidden', restantes > 5);
-            if(restantes <= 5) alertaVacaciones.textContent = `⚠️ ${restantes} días V`;
+            document.getElementById('alerta-vacaciones').classList.toggle('hidden', restantes > 5);
+            if(restantes <= 5) document.getElementById('alerta-vacaciones').textContent = `⚠️ ${restantes} días V`;
         }
 
         function crearMes(anio, mes) {
             const wrap = document.createElement('div');
             wrap.className = 'bg-gray-50 dark:bg-gray-800 p-5 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-700 transition-colors';
-            wrap.id = `mes-${anio}-${mes}`;
             const fMes = new Date(anio, mes);
             const nombre = new Intl.DateTimeFormat('es-ES', {month:'long'}).format(fMes);
-
-            let totalHorasMes = 0;
-            let totalMes = 0;
-            const daysInMonthCalc = new Date(anio, mes+1, 0).getDate();
-            for(let i=1; i<=daysInMonthCalc; i++) {
-                const fStr = `${anio}-${String(mes+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                const d = datosGuardias[fStr] || {};
-                if(d.horasExtras) totalHorasMes += d.horasExtras;
-                if(d.guardia) totalMes += (d.guardia.precio || 0);
-            }
-            const horasLabel = totalHorasMes !== 0 ? `${totalHorasMes > 0 ? '+':''}${totalHorasMes}h` : '';
-            const notaMesKey = `${anio}-${mes}`;
-            const notaMesVal = notasMes[notaMesKey] || '';
 
             let html = `<div class="flex justify-between items-center mb-3">
                 <h2 class="font-black capitalize dark:text-white text-lg tracking-tight">${nombre}</h2>
                 <div class="flex gap-2 items-center">
-                    ${horasLabel ? `<div class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-xl text-[10px] font-black">${horasLabel}</div>` : ''}
                     <div id="badge-${anio}-${mes}" class="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 px-3 py-1.5 rounded-2xl text-[11px] font-black ${ocultarDinero?'hidden':''}">
                         <span id="total-${anio}-${mes}">0 €</span>
                     </div>
@@ -472,94 +390,74 @@
                 const data = datosGuardias[fStr] || {};
                 const btn = document.createElement('button');
 
-                let clases = 'h-14 rounded-2xl text-xs relative flex flex-col items-center justify-center shadow-sm transition-all ';
+                let clases = 'h-14 rounded-2xl text-[10px] relative flex flex-col items-center justify-center shadow-sm transition-all ';
                 const isWeekend = fObj.getDay() === 0 || fObj.getDay() === 6;
 
-                // Lógica mejorada de color del grid para soportar Festivos (F)
-                if(data.turno) {
-                    clases += (estilosT[data.turno.tipo] || 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white ');
-                } else if (data.guardia) {
-                    if (data.guardia.subtipo === 'F') {
-                        clases += 'bg-green-200 text-green-900 dark:bg-green-900 dark:text-green-200 '; // Igual que el botón Festivo
-                    } else {
-                        clases += 'bg-red-100 text-red-900 dark:bg-red-900 dark:text-red-200 ';
-                    }
+                // Festivo usa el mismo verde que Libranza pero más oscuro, si no hay turno.
+                if(data.turno || data.guardia) {
+                    if(data.turno) clases += (estilosT[data.turno.tipo] || 'bg-purple-100 text-purple-800');
+                    else if(data.guardia?.subtipo === 'F') clases += 'bg-green-200 text-green-800 dark:bg-green-800 dark:text-white';
+                    else clases += 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100';
                 } else {
-                    clases += isWeekend ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 ' : 'bg-white dark:bg-gray-700 ';
+                    clases += isWeekend ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300' : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100';
                 }
+                
+                if(data.aapp >= 8) { clases = 'h-14 rounded-2xl text-[10px] relative flex flex-col items-center justify-center shadow-sm transition-all bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100'; }
 
                 if(fObj < hoy) clases += ' dia-pasado';
                 if(fObj.getTime() === hoy.getTime()) clases += ' ring-4 ring-blue-500/30 border-blue-500 dark:border-blue-400 border-2';
                 if(diasSeleccionados.has(fStr)) clases += ' dia-seleccionado-multi';
 
                 btn.className = clases;
-                btn.dataset.fstr = fStr;
-                btn.innerHTML = `<span class="${(data.turno||data.guardia)?'absolute top-1.5 left-2 text-[9px]':''} font-bold">${i}</span>`;
+                btn.innerHTML = `<span class="${(data.turno||data.guardia||data.aapp>=8)?'absolute top-1.5 left-2 text-[9px]':''} font-bold">${i}</span>`;
                 
-                if(data.turno) btn.innerHTML += `<span class="font-black mt-1 text-[10px] leading-none uppercase tracking-tighter">${data.turno.subtipo || data.turno.tipo}</span>`;
-                if(data.guardia) {
-                    btn.innerHTML += `<span class="text-[8px] bg-white/60 dark:bg-black/20 px-1 rounded-md mt-1 font-black text-red-700 dark:text-red-400 shadow-sm">${data.guardia.subtipo}</span>`;
-                    totalMesRender += (data.guardia.precio || 0);
+                if(data.aapp >= 8) {
+                    btn.innerHTML += `<span class="font-black mt-1 text-[10px] leading-none uppercase tracking-tighter">AAPP</span>`;
+                } else {
+                    if(data.turno) btn.innerHTML += `<span class="font-black mt-1 text-[10px] leading-none uppercase tracking-tighter">${data.turno.subtipo || data.turno.tipo}</span>`;
+                    if(data.guardia) {
+                        btn.innerHTML += `<span class="text-[8px] bg-white/70 dark:bg-black/30 px-1 rounded-md mt-1 font-black text-red-700 dark:text-red-300">${data.guardia.subtipo}</span>`;
+                        totalMesRender += (data.guardia.precio || 0);
+                    }
                 }
+                
                 if(data.nota) btn.innerHTML += `<span class="absolute top-1.5 right-2 w-1.5 h-1.5 bg-red-500 rounded-full shadow-sm"></span>`;
                 
-                // Horas con "píldoras" de fondo para garantizar lectura sin importar el color del turno
-                if(data.horasExtras) {
-                    const colorH = data.horasExtras > 0 ? 'text-green-700 dark:text-green-300' : 'text-blue-700 dark:text-blue-300';
-                    btn.innerHTML += `<span class="absolute bottom-1 right-1 text-[8px] font-black ${colorH} bg-white/80 dark:bg-black/40 px-1 rounded-md shadow-sm">${data.horasExtras > 0 ? '+':''}${data.horasExtras}h</span>`;
-                }
-                if(data.horasAP && data.horasAP < 8) {
-                    btn.innerHTML += `<span class="absolute bottom-1 left-1 text-[8px] font-black text-teal-800 dark:text-teal-200 bg-white/80 dark:bg-black/40 px-1 rounded-md shadow-sm">${data.horasAP}h AP</span>`;
-                }
+                // Píldoras para asegurar contraste
+                let pildoras = '';
+                if(data.horasExtras) pildoras += `<span class="pildora-fondo text-[8px] font-black ${data.horasExtras > 0 ? 'text-green-300' : 'text-blue-300'}">${data.horasExtras > 0 ? '+':''}${data.horasExtras}h</span>`;
+                if(data.aapp > 0 && data.aapp < 8) pildoras += `<span class="pildora-fondo text-[8px] font-black text-teal-300">${data.aapp}h AP</span>`;
+                if(pildoras) btn.innerHTML += `<div class="absolute bottom-1 right-1 flex flex-col items-end gap-0.5">${pildoras}</div>`;
 
                 btn.onclick = () => {
-                    if(soloLectura) {
-                        const icon = document.getElementById('btn-toggle-candado-fab');
-                        icon.classList.add('bg-red-200');
-                        setTimeout(() => icon.classList.remove('bg-red-200'), 300);
-                        return;
-                    }
+                    if(soloLectura) return;
                     if(modoMultiSelect) {
-                        if(diasSeleccionados.has(fStr)) {
-                            diasSeleccionados.delete(fStr);
-                            btn.classList.remove('dia-seleccionado-multi');
-                        } else {
-                            diasSeleccionados.add(fStr);
-                            btn.classList.add('dia-seleccionado-multi');
-                        }
+                        if(diasSeleccionados.has(fStr)) { diasSeleccionados.delete(fStr); btn.classList.remove('dia-seleccionado-multi'); }
+                        else { diasSeleccionados.add(fStr); btn.classList.add('dia-seleccionado-multi'); }
                         document.getElementById('count-seleccionados').textContent = diasSeleccionados.size;
                         return;
                     }
                     
-                    // Preparación del modal en edición simple
-                    diaSeleccionadoStr = fStr; 
-                    mesSeleccionadoData = {anio, mes, fObj};
+                    diaSeleccionadoStr = fStr;
                     document.getElementById('titulo-modal').textContent = `${i} de ${nombre}`;
+                    document.getElementById('subtitulo-modal-diasemana').textContent = diasSemana[fObj.getDay()];
                     document.getElementById('input-nota').value = data.nota || '';
                     document.getElementById('count-horas-dia').textContent = data.horasExtras || 0;
-                    document.getElementById('count-ap-dia').textContent = data.horasAP || 0;
+                    document.getElementById('count-aapp-dia').textContent = data.aapp || 0;
+                    
+                    revisarBloqueoAAPP(data.aapp || 0, `${i} de ${nombre}`);
+                    
                     document.getElementById('seccion-nota-horas').classList.remove('hidden');
-                    
-                    // Verificación de estado de horas de Asuntos Propios
-                    checkAPState(data.horasAP || 0);
-                    
                     document.getElementById('modal-turno').classList.remove('hidden');
                 };
                 grid.appendChild(btn);
             }
 
-            const notaWrap = document.createElement('div');
-            notaWrap.className = 'mt-3';
-            const notaInput = document.createElement('input');
-            notaInput.type = 'text';
-            notaInput.placeholder = '📝 Nota del mes...';
-            notaInput.value = notaMesVal;
+            const notaWrap = document.createElement('div'); notaWrap.className = 'mt-3';
+            const notaInput = document.createElement('input'); notaInput.type = 'text'; notaInput.placeholder = '📝 Nota del mes...';
+            notaInput.value = notasMes[`${anio}-${mes}`] || '';
             notaInput.className = 'w-full text-[11px] bg-transparent border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-gray-500 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/30';
-            notaInput.oninput = () => {
-                notasMes[notaMesKey] = notaInput.value.trim();
-                clearTimeout(debounceNotaMes);
-                debounceNotaMes = setTimeout(() => guardarTodo(true), 800);
-            };
+            notaInput.oninput = () => { notasMes[`${anio}-${mes}`] = notaInput.value.trim(); clearTimeout(debounceNotaMes); debounceNotaMes = setTimeout(() => guardarTodo(true), 800); };
             notaWrap.appendChild(notaInput);
 
             wrap.innerHTML = html;
@@ -568,6 +466,18 @@
             const spanTotal = wrap.querySelector(`#total-${anio}-${mes}`);
             if(spanTotal) spanTotal.textContent = totalMesRender.toFixed(2) + ' €';
             return wrap;
+        }
+
+        function revisarBloqueoAAPP(val, tituloOrig) {
+            const grid = document.getElementById('vista-principal');
+            const tit = document.getElementById('titulo-modal');
+            if (val >= 8) {
+                grid.style.pointerEvents = 'none'; grid.style.opacity = '0.3';
+                tit.textContent = 'DÍA ASIGNADO AAPP (8h)';
+            } else {
+                grid.style.pointerEvents = 'auto'; grid.style.opacity = '1';
+                tit.textContent = modoMultiSelect ? "Aplicar a Varios Días" : tituloOrig;
+            }
         }
 
         function actualizarGlobal() {
@@ -579,43 +489,32 @@
         function actualizarEstadisticas(anio) {
             let v=0, apHoras=0, hTotal=0;
             const guardiasConteo = {};
-            const guardiasPorMes = Array(12).fill(0);
-            const horasPorMes = Array(12).fill(0);
 
             Object.keys(datosGuardias).forEach(fecha => {
                 if(fecha.startsWith(anio)) {
                     const d = datosGuardias[fecha];
-                    const mesIdx = parseInt(fecha.split('-')[1]) - 1;
                     if(d.turno?.tipo === 'V') v++;
-                    if(d.turno?.tipo === 'AP' || d.horasAP === 8) apHoras += 8;
-                    else if (d.horasAP) apHoras += d.horasAP;
-                    
-                    if(d.horasExtras) { hTotal += d.horasExtras; horasPorMes[mesIdx] += d.horasExtras; }
-                    if(d.guardia) {
-                        guardiasConteo[d.guardia.subtipo] = (guardiasConteo[d.guardia.subtipo] || 0) + 1;
-                        guardiasPorMes[mesIdx]++;
-                    }
+                    if(d.aapp) apHoras += d.aapp;
+                    if(d.horasExtras) hTotal += d.horasExtras;
+                    if(d.guardia) guardiasConteo[d.guardia.subtipo] = (guardiasConteo[d.guardia.subtipo] || 0) + 1;
                 }
             });
 
             const baseV = basesAnuales[anio]?.v || 22;
             const baseAP = basesAnuales[anio]?.ap || 6;
             document.getElementById('stats-year-label').textContent = anio;
-            document.getElementById('count-v').textContent = v;
-            document.getElementById('display-base-v').textContent = baseV;
+            document.getElementById('count-v').textContent = v; document.getElementById('display-base-v').textContent = baseV;
             document.getElementById('input-base-v').value = baseV;
             
-            // Asuntos Propios siempre se muestran en horas
-            document.getElementById('count-ap').textContent = apHoras;
-            document.getElementById('display-base-ap').textContent = baseAP * 8; 
+            document.getElementById('count-ap-horas').textContent = apHoras; 
+            document.getElementById('display-base-ap-horas').textContent = baseAP * 8;
             document.getElementById('input-base-ap').value = baseAP;
 
             const elH = document.getElementById('total-horas-global');
             elH.textContent = (hTotal > 0 ? '+' : '') + hTotal + 'h';
             elH.className = `text-xl font-black ${hTotal >= 0 ? 'text-blue-600' : 'text-red-600'}`;
 
-            const mesActual = hoy.getMonth();
-            const anioActual = hoy.getFullYear();
+            const mesActual = hoy.getMonth(); const anioActual = hoy.getFullYear();
             if(parseInt(anio) === anioActual) {
                 let gMes=0, dMes=0, hMes=0;
                 Object.keys(datosGuardias).forEach(f => {
@@ -629,170 +528,81 @@
                 document.getElementById('dinero-mes-actual').textContent = ocultarDinero ? '*** €' : dMes.toFixed(2) + ' €';
                 document.getElementById('horas-mes-actual').textContent = (hMes > 0 ? '+' : '') + hMes + 'h';
                 document.getElementById('resumen-mes-actual').classList.remove('hidden');
-            } else {
-                document.getElementById('resumen-mes-actual').classList.add('hidden');
-            }
+            } else { document.getElementById('resumen-mes-actual').classList.add('hidden'); }
 
             const dg = document.getElementById('contenedor-desglose-guardias'); dg.innerHTML = '';
             Object.entries(guardiasConteo).sort().forEach(([tipo, num]) => {
                 dg.innerHTML += `<div class="bg-white dark:bg-gray-700 p-3 rounded-2xl flex justify-between font-black shadow-sm border border-gray-100 dark:border-gray-600"><span>${tipo}</span> <span class="text-red-500 bg-red-50 dark:bg-red-900/30 px-2 rounded-lg">${num}</span></div>`;
             });
-
-            const isDark = document.documentElement.classList.contains('dark');
-            const labelColor = isDark ? '#9ca3af' : '#6b7280';
-            const meses = ['E','F','M','A','M','J','J','A','S','O','N','D'];
-
-            const ctxG = document.getElementById('chart-guardias-mes').getContext('2d');
-            if(chartGuardias) chartGuardias.destroy();
-            chartGuardias = new Chart(ctxG, {
-                type: 'bar',
-                data: { labels: meses, datasets: [{ data: guardiasPorMes, backgroundColor: '#f87171', borderRadius: 6 }] },
-                options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:labelColor,font:{size:10}}}, y:{ticks:{color:labelColor,font:{size:10}},beginAtZero:true,grid:{color:isDark?'#374151':'#e5e7eb'}} }, animation:{duration:300} }
-            });
-
-            const anios = [parseInt(anio)-1, parseInt(anio)];
-            const dataComparativa = anios.map(a => {
-                let c = 0;
-                Object.keys(datosGuardias).forEach(f => { if(f.startsWith(a) && datosGuardias[f].guardia) c++; });
-                return c;
-            });
-            const ctxC = document.getElementById('chart-comparativa-anios').getContext('2d');
-            if(chartComparativa) chartComparativa.destroy();
-            chartComparativa = new Chart(ctxC, {
-                type: 'bar',
-                data: { labels: anios.map(String), datasets: [{ data: dataComparativa, backgroundColor: ['#60a5fa','#34d399'], borderRadius: 8 }] },
-                options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:labelColor}}, y:{ticks:{color:labelColor},beginAtZero:true,grid:{color:isDark?'#374151':'#e5e7eb'}} }, animation:{duration:300} }
-            });
-
-            const ctxH = document.getElementById('chart-horas-mes').getContext('2d');
-            if(chartHoras) chartHoras.destroy();
-            chartHoras = new Chart(ctxH, {
-                type: 'bar',
-                data: { labels: meses, datasets: [{ data: horasPorMes, backgroundColor: horasPorMes.map(h => h >= 0 ? '#34d399' : '#f87171'), borderRadius: 6 }] },
-                options: { plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:labelColor,font:{size:10}}}, y:{ticks:{color:labelColor,font:{size:10}},grid:{color:isDark?'#374151':'#e5e7eb'}} }, animation:{duration:300} }
-            });
         }
 
-        // --- 5. LÓGICA UNIFICADA DE EDICIÓN Y AAPP ---
-        function checkAPState(val) {
-            const disableOthers = (val === 8);
-            const vistaBotones = document.querySelectorAll('#vista-principal .opcion-turno, #btn-menu-guardias, #btn-menu-sedes');
-            vistaBotones.forEach(btn => {
-                if(btn.dataset.categoria !== 'borrar') {
-                    btn.disabled = disableOthers;
-                    btn.style.opacity = disableOthers ? 0.3 : 1;
-                    btn.style.cursor = disableOthers ? 'not-allowed' : 'pointer';
-                }
-            });
-            if(disableOthers) {
-                document.getElementById('subtitulo-modal-diasemana').innerHTML = '<span class="text-teal-600 dark:text-teal-400 tracking-tight">8H AP — DÍA ASIGNADO AAPP</span>';
-            } else {
-                if(modoMultiSelect) {
-                    document.getElementById('subtitulo-modal-diasemana').textContent = "SELECCIÓN MÚLTIPLE";
-                } else if(mesSeleccionadoData) {
-                    document.getElementById('subtitulo-modal-diasemana').textContent = diasSemana[mesSeleccionadoData.fObj.getDay()];
-                }
-            }
-        }
-
-        function aplicarCambioAFechas(accion) {
-            if (modoMultiSelect && diasSeleccionados.size > 0) {
-                diasSeleccionados.forEach(fStr => accion(fStr));
-                guardarTodo();
-                
-                document.getElementById('modal-turno').classList.add('hidden');
-                modoMultiSelect = false;
-                diasSeleccionados.clear();
-                bannerMulti.classList.add('hidden');
-                bannerMulti.classList.remove('flex');
-                actualizarTextosFab();
-                cargarAnio(parseInt(selectAnio.value));
-            } else {
-                accion(diaSeleccionadoStr);
-                finalizarEdicion();
-            }
-        }
-
+        // --- 5. EVENTOS EDICIÓN ---
         document.querySelectorAll('.opcion-turno').forEach(btn => {
             btn.onclick = () => {
-                const cat = btn.dataset.categoria;
-                aplicarCambioAFechas((fStr) => {
+                const cat = btn.dataset.categoria; const tipo = btn.dataset.tipo; const sub = btn.dataset.subtipo; const pre = btn.dataset.precio;
+                
+                const aplicarA = modoMultiSelect ? Array.from(diasSeleccionados) : [diaSeleccionadoStr];
+                
+                aplicarA.forEach(fStr => {
                     let d = datosGuardias[fStr] || {};
-                    if(cat === 'borrar') d = {}; 
+                    if(cat === 'borrar') d = {};
                     else if(cat === 'turno') {
-                        if(btn.dataset.tipo === 'ninguno') delete d.turno;
-                        else d.turno = { tipo: btn.dataset.tipo, subtipo: btn.dataset.subtipo || null };
+                        if(tipo === 'ninguno') delete d.turno; else d.turno = { tipo: tipo, subtipo: sub || null };
                     } else if(cat === 'guardia') {
-                        if(btn.dataset.subtipo === 'ninguno') delete d.guardia;
-                        else d.guardia = { subtipo: btn.dataset.subtipo, precio: parseFloat(btn.dataset.precio) };
+                        if(sub === 'ninguno') delete d.guardia; else d.guardia = { subtipo: sub, precio: parseFloat(pre) };
                     }
-                    datosGuardias[fStr] = d;
+                    if(!d.turno && !d.guardia && !d.nota && !d.horasExtras && !d.aapp) delete datosGuardias[fStr];
+                    else datosGuardias[fStr] = d;
                 });
+                finalizarEdicion();
             };
         });
 
         function finalizarEdicion() {
-            if (!modoMultiSelect && diaSeleccionadoStr) {
+            if(!modoMultiSelect) {
                 const d = datosGuardias[diaSeleccionadoStr] || {};
                 d.nota = document.getElementById('input-nota').value.trim();
                 d.horasExtras = parseFloat(document.getElementById('count-horas-dia').textContent) || 0;
-                d.horasAP = parseInt(document.getElementById('count-ap-dia').textContent) || 0;
+                d.aapp = parseFloat(document.getElementById('count-aapp-dia').textContent) || 0;
                 
-                if (d.horasAP === 8) {
-                    d.turno = { tipo: 'AP', subtipo: null };
-                    delete d.guardia; 
-                } else if (d.turno && d.turno.tipo === 'AP' && d.horasAP < 8) {
-                    delete d.turno; 
-                }
-
-                if(!d.turno && !d.guardia && !d.nota && !d.horasExtras && !d.horasAP) {
-                    delete datosGuardias[diaSeleccionadoStr];
-                } else {
-                    datosGuardias[diaSeleccionadoStr] = d;
-                }
+                if(d.aapp >= 8) { delete d.turno; delete d.guardia; }
+                
+                if(!d.turno && !d.guardia && !d.nota && !d.horasExtras && !d.aapp) delete datosGuardias[diaSeleccionadoStr];
+                else datosGuardias[diaSeleccionadoStr] = d;
             }
             guardarTodo();
+            cerrarModalTurno();
+            if(modoMultiSelect) cancelarMultiSelect();
+            cargarAnio(parseInt(selectAnio.value));
+        }
+
+        function cerrarModalTurno() {
             document.getElementById('modal-turno').classList.add('hidden');
             document.getElementById('vista-principal').classList.remove('hidden');
             document.getElementById('vista-guardias').classList.add('hidden');
             document.getElementById('vista-sedes').classList.add('hidden');
-            cargarAnio(parseInt(selectAnio.value));
         }
 
         document.getElementById('btn-guardar-nota').onclick = finalizarEdicion;
-        document.getElementById('btn-sumar-hora-dia').onclick = () => {
-            let c = document.getElementById('count-horas-dia');
-            c.textContent = (parseFloat(c.textContent)+0.5).toFixed(1).replace('.0','');
+        document.getElementById('btn-sumar-hora-dia').onclick = () => { let c = document.getElementById('count-horas-dia'); c.textContent = (parseFloat(c.textContent)+0.5).toFixed(1).replace('.0',''); };
+        document.getElementById('btn-restar-hora-dia').onclick = () => { let c = document.getElementById('count-horas-dia'); c.textContent = (parseFloat(c.textContent)-0.5).toFixed(1).replace('.0',''); };
+
+        document.getElementById('btn-sumar-aapp-dia').onclick = () => { 
+            let c = document.getElementById('count-aapp-dia'); 
+            let val = parseFloat(c.textContent) + 2; 
+            if(val > 8) val = 8; 
+            c.textContent = val; 
+            revisarBloqueoAAPP(val, document.getElementById('titulo-modal').textContent);
         };
-        document.getElementById('btn-restar-hora-dia').onclick = () => {
-            let c = document.getElementById('count-horas-dia');
-            c.textContent = (parseFloat(c.textContent)-0.5).toFixed(1).replace('.0','');
+        document.getElementById('btn-restar-aapp-dia').onclick = () => { 
+            let c = document.getElementById('count-aapp-dia'); 
+            let val = parseFloat(c.textContent) - 2; 
+            if(val < 0) val = 0; 
+            c.textContent = val; 
+            revisarBloqueoAAPP(val, document.getElementById('titulo-modal').textContent);
         };
 
-        // Controles de Asuntos Propios (Sumar/Restar de 2 en 2)
-        document.getElementById('btn-sumar-ap-dia').onclick = () => {
-            let val = parseInt(document.getElementById('count-ap-dia').textContent) || 0;
-            if(val < 8) val += 2;
-            document.getElementById('count-ap-dia').textContent = val;
-            checkAPState(val);
-        };
-        document.getElementById('btn-restar-ap-dia').onclick = () => {
-            let val = parseInt(document.getElementById('count-ap-dia').textContent) || 0;
-            if(val > 0) val -= 2;
-            document.getElementById('count-ap-dia').textContent = val;
-            checkAPState(val);
-        };
-
-        document.getElementById('btn-cerrar-stats').onclick = () => document.getElementById('modal-stats').classList.add('hidden');
-        document.getElementById('btn-cerrar-modal').onclick = () => document.getElementById('modal-turno').classList.add('hidden');
-
-        document.getElementById('btn-toggle-dinero').onclick = () => {
-            ocultarDinero = !ocultarDinero;
-            localStorage.setItem('ocultarDinero', ocultarDinero);
-            cargarAnio(parseInt(selectAnio.value));
-        };
-
-        // Submenús Modales
+        // Submenús
         document.getElementById('btn-menu-guardias').onclick = () => { document.getElementById('vista-principal').classList.add('hidden'); document.getElementById('vista-guardias').classList.remove('hidden'); };
         document.getElementById('btn-volver-principal').onclick = () => { document.getElementById('vista-principal').classList.remove('hidden'); document.getElementById('vista-guardias').classList.add('hidden'); };
         document.getElementById('btn-menu-sedes').onclick = () => { document.getElementById('vista-principal').classList.add('hidden'); document.getElementById('vista-sedes').classList.remove('hidden'); };
@@ -800,144 +610,83 @@
 
         const gGrid = document.getElementById('grid-guardias');
         Object.entries(preciosG).sort().forEach(([k,v]) => {
-            const b = document.createElement('button');
-            b.className = 'p-3 bg-red-100 dark:bg-red-900/40 text-red-900 dark:text-red-100 text-[10px] font-black rounded-2xl border border-red-200 dark:border-red-800 shadow-sm uppercase';
-            b.textContent = k;
-            b.onclick = () => {
-                aplicarCambioAFechas((fStr) => {
-                    datosGuardias[fStr] = {...(datosGuardias[fStr]||{}), guardia: {subtipo:k, precio:v}};
-                });
-            };
+            const b = document.createElement('button'); b.className = 'opcion-turno p-3 bg-red-50 dark:bg-red-900/30 text-[10px] text-red-800 dark:text-red-200 font-black rounded-2xl border border-red-100 dark:border-red-800 shadow-sm uppercase active:scale-95 transition-transform'; b.textContent = k;
+            b.dataset.categoria = 'guardia'; b.dataset.subtipo = k; b.dataset.precio = v;
             gGrid.appendChild(b);
         });
 
         const sGrid = document.getElementById('grid-sedes');
         sedesDefinidas.forEach(s => {
-            const b = document.createElement('button');
-            b.className = 'p-3 bg-purple-100 dark:bg-purple-900/40 text-purple-900 dark:text-purple-100 text-[10px] font-black rounded-2xl border border-purple-200 dark:border-purple-800 shadow-sm uppercase leading-tight';
-            b.innerHTML = `<span>${s.nombre}</span><br><span class="text-[8px] opacity-40">${s.sub}</span>`;
-            b.onclick = () => {
-                aplicarCambioAFechas((fStr) => {
-                    datosGuardias[fStr] = {...(datosGuardias[fStr]||{}), turno: {tipo:'Sede', subtipo:s.sub}};
-                });
-            };
+            const b = document.createElement('button'); b.className = 'opcion-turno p-3 bg-purple-50 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 text-[10px] font-black rounded-2xl border border-purple-100 dark:border-purple-800 shadow-sm uppercase leading-tight active:scale-95 transition-transform'; b.innerHTML = `<span>${s.nombre}</span><br><span class="text-[8px] opacity-40">${s.sub}</span>`;
+            b.dataset.categoria = 'turno'; b.dataset.tipo = 'Sede'; b.dataset.subtipo = s.sub;
             sGrid.appendChild(b);
         });
 
-        document.getElementById('input-base-v').oninput = () => {
-            basesAnuales[parseInt(selectAnio.value)] = { v: parseInt(document.getElementById('input-base-v').value) || 22, ap: parseInt(document.getElementById('input-base-ap').value) || 6 };
-            guardarTodo(); actualizarEstadisticas(parseInt(selectAnio.value));
+        document.getElementById('btn-cerrar-modal').onclick = cerrarModalTurno;
+
+        // --- 6. FAB Y CONTROLES GENERALES ---
+        const btnFabMain = document.getElementById('btn-fab-main');
+        const iconoFab = document.getElementById('icono-fab');
+        
+        btnFabMain.onclick = () => {
+            const oculto = fabMenu.classList.contains('hidden');
+            fabMenu.classList.toggle('hidden');
+            iconoFab.textContent = oculto ? '✕' : '🍔';
         };
+
+        function actualizarTextosMenu() {
+            document.getElementById('btn-tema').innerHTML = document.documentElement.classList.contains('dark') ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+            document.getElementById('btn-toggle-candado').innerHTML = soloLectura ? '🔒 Habilitar Edición' : '🔓 Bloquear Edición';
+        }
+
+        document.getElementById('btn-tema').onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); actualizarTextosMenu(); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; };
+        document.getElementById('btn-toggle-candado').onclick = () => { soloLectura = !soloLectura; localStorage.setItem('soloLectura', soloLectura); actualizarTextosMenu(); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; };
+        document.getElementById('btn-hoy').onclick = () => { selectAnio.value = hoy.getFullYear(); cargarAnio(hoy.getFullYear()); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; setTimeout(() => { const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`); if(el) el.scrollIntoView({behavior:'smooth', block: 'start'}); }, 100); };
+        document.getElementById('btn-abrir-stats').onclick = () => { document.getElementById('modal-stats').classList.remove('hidden'); actualizarEstadisticas(parseInt(selectAnio.value)); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; };
+        document.getElementById('btn-cerrar-stats').onclick = () => document.getElementById('modal-stats').classList.add('hidden');
+        document.getElementById('btn-toggle-dinero').onclick = () => { ocultarDinero = !ocultarDinero; localStorage.setItem('ocultarDinero', ocultarDinero); cargarAnio(parseInt(selectAnio.value)); };
+
+        document.getElementById('input-base-v').oninput = () => { basesAnuales[parseInt(selectAnio.value)] = { v: parseInt(document.getElementById('input-base-v').value) || 22, ap: parseInt(document.getElementById('input-base-ap').value) || 6 }; guardarTodo(); actualizarEstadisticas(parseInt(selectAnio.value)); };
         document.getElementById('input-base-ap').oninput = document.getElementById('input-base-v').oninput;
 
-        // --- 6. MODO SELECCIÓN MÚLTIPLE ---
-        document.getElementById('btn-cancelar-multi').onclick = () => {
-            modoMultiSelect = false;
-            diasSeleccionados.clear();
-            bannerMulti.classList.add('hidden');
-            bannerMulti.classList.remove('flex');
-            actualizarTextosFab();
+        // Multi Select
+        document.getElementById('btn-multi-select').onclick = () => {
+            modoMultiSelect = !modoMultiSelect;
+            if(!modoMultiSelect) cancelarMultiSelect();
+            else {
+                diasSeleccionados.clear();
+                document.getElementById('banner-multi').classList.remove('hidden');
+                document.getElementById('banner-multi').classList.add('flex');
+                document.getElementById('btn-multi-select').classList.add('bg-blue-100', 'border-blue-500');
+                fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔';
+            }
             cargarAnio(parseInt(selectAnio.value));
         };
 
+        function cancelarMultiSelect() {
+            modoMultiSelect = false; diasSeleccionados.clear();
+            document.getElementById('banner-multi').classList.add('hidden'); document.getElementById('banner-multi').classList.remove('flex');
+            document.getElementById('btn-multi-select').classList.remove('bg-blue-100', 'border-blue-500');
+            cargarAnio(parseInt(selectAnio.value));
+        }
+
+        document.getElementById('btn-cancelar-multi').onclick = cancelarMultiSelect;
         document.getElementById('btn-aplicar-multi').onclick = () => {
             if(diasSeleccionados.size === 0) return;
-            checkAPState(0); 
             document.getElementById('titulo-modal').textContent = `Aplicar a ${diasSeleccionados.size} días`;
-            document.getElementById('seccion-nota-horas').classList.add('hidden'); 
-            
+            document.getElementById('subtitulo-modal-diasemana').textContent = "SELECCIÓN MÚLTIPLE";
+            document.getElementById('seccion-nota-horas').classList.add('hidden');
+            revisarBloqueoAAPP(0, "");
             document.getElementById('modal-turno').classList.remove('hidden');
-            document.getElementById('vista-principal').classList.remove('hidden');
-            document.getElementById('vista-guardias').classList.add('hidden');
-            document.getElementById('vista-sedes').classList.add('hidden');
         };
-
-        // --- 7. BOTÓN FLOTANTE (FAB) Y MENÚ ---
-        const fabMenu = document.getElementById('fab-menu');
-        const btnFabMain = document.getElementById('btn-fab-main');
-        
-        btnFabMain.onclick = () => fabMenu.classList.toggle('hidden');
-
-        document.addEventListener('click', (e) => {
-            if (!btnFabMain.contains(e.target) && !fabMenu.contains(e.target)) {
-                fabMenu.classList.add('hidden');
-            }
-        });
-
-        const actualizarTextosFab = () => {
-            const esOscuro = document.documentElement.classList.contains('dark');
-            document.getElementById('texto-tema').textContent = esOscuro ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
-            document.getElementById('texto-candado').textContent = soloLectura ? '🔒 Editar Cuadrante' : '🔓 Bloquear para Leer';
-            
-            const btnMulti = document.getElementById('btn-multi-select-fab');
-            if (modoMultiSelect) {
-                btnMulti.classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400');
-                document.getElementById('texto-multi').textContent = '☑️ Cancelar Selección';
-            } else {
-                btnMulti.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400');
-                document.getElementById('texto-multi').textContent = '☑️ Selec. Múltiple';
-            }
-        };
-
-        document.getElementById('btn-tema').onclick = () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-            actualizarTextosFab();
-            fabMenu.classList.add('hidden');
-        };
-
-        document.getElementById('btn-hoy').onclick = () => {
-            selectAnio.value = hoy.getFullYear();
-            cargarAnio(hoy.getFullYear());
-            setTimeout(() => {
-                const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`);
-                if(el) el.scrollIntoView({behavior:'smooth', block: 'start'});
-            }, 100);
-            fabMenu.classList.add('hidden');
-        };
-        
-        document.getElementById('btn-abrir-stats-fab').onclick = () => {
-            document.getElementById('modal-stats').classList.remove('hidden');
-            actualizarEstadisticas(parseInt(selectAnio.value));
-            fabMenu.classList.add('hidden');
-        };
-
-        document.getElementById('btn-toggle-candado-fab').onclick = () => {
-            soloLectura = !soloLectura;
-            localStorage.setItem('soloLectura', soloLectura);
-            actualizarTextosFab();
-            fabMenu.classList.add('hidden');
-        };
-
-        document.getElementById('btn-multi-select-fab').onclick = () => {
-            modoMultiSelect = !modoMultiSelect;
-            diasSeleccionados.clear();
-            document.getElementById('count-seleccionados').textContent = '0';
-            bannerMulti.classList.toggle('hidden', !modoMultiSelect);
-            bannerMulti.classList.toggle('flex', modoMultiSelect);
-            actualizarTextosFab();
-            cargarAnio(parseInt(selectAnio.value));
-            fabMenu.classList.add('hidden');
-        };
-
-        document.getElementById('btn-logout-fab').onclick = () => {
-            signOut(auth);
-            fabMenu.classList.add('hidden');
-        };
-
-        // --- 8. REGISTRO SERVICE WORKER PWA ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('PWA lista y Service Worker registrado', reg))
-                    .catch(err => console.warn('Error al registrar PWA', err));
-            });
-        }
 
         selectAnio.onchange = () => cargarAnio(parseInt(selectAnio.value));
         if(localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
-        actualizarTextosFab();
-        
+        actualizarTextosMenu();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
+        }
     </script>
 </body>
 </html>
