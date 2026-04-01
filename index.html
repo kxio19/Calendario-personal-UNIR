@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
+    <link rel="manifest" href="./manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -786,6 +787,15 @@
         selectAnio.onchange = () => cargarAnio(parseInt(selectAnio.value));
         if(localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
         cargarAnio(hoy.getFullYear());
+        
+        // Registrar el Service Worker para que sea una PWA instalable
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('PWA lista y Service Worker registrado', reg))
+            .catch(err => console.warn('Error al registrar PWA', err));
+        });
+      }
     </script>
 </body>
 </html>
