@@ -44,4 +44,60 @@ Esta aplicación es una **PWA (Progressive Web App)**. Puedes instalarla en tu t
 - **Modo Offline Real:** Gracias a la caché persistente de Firebase, puedes añadir o borrar guardias sin cobertura (ej. en el ascensor) y se sincronizarán solas de forma segura al recuperar la red.
 - Indicador de estado en tiempo real: 🟡 guardando / 🟢 sincronizado / 🔴 error
 - Sin login — acceso directo desde cualquier dispositivo con la URL
-- **Soporte PWA
+- **Soporte PWA** — Service Worker con caché para arranques inmediatos y modo avión.
+
+---
+
+## 🚀 Tecnologías
+
+| Herramienta | Uso |
+|---|---|
+| HTML + JS vanilla | Interfaz y lógica principal |
+| PWA (Service Worker) | Instalación móvil y gestión de caché offline |
+| Tailwind CSS (CDN) | Estilos y responsive |
+| Firebase Firestore | Base de datos en tiempo real (con `persistentLocalCache`) |
+| Chart.js | Gráficos de estadísticas |
+| html2canvas | Captura de pantalla de meses |
+| GitHub Pages | Hosting gratuito |
+
+---
+
+## ⚙️ Configuración
+
+### Firebase
+1. Crea un proyecto en [console.firebase.google.com](https://console.firebase.google.com)
+2. Activa **Firestore Database** en modo prueba
+3. Configura las reglas de Firestore:
+```text
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /mis-guardias/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+Registra una app web y copia el bloque firebaseConfig
+
+Pégalo en index.html en la sección // --- 1. CONFIGURACIÓN FIREBASE ---
+
+GitHub Pages
+Sube los archivos al repositorio
+
+Ve a Settings → Pages
+
+Branch: main, carpeta: / (root)
+
+La app estará disponible en https://TU_USUARIO.github.io/REPO/
+
+📁 Estructura
+Plaintext
+/
+└── index.html     ← Toda la aplicación
+└── manifest.json  ← Identidad de la app para el sistema operativo
+└── sw.js          ← Service Worker para caché de archivos
+└── README.md      ← Este archivo
+Sin dependencias locales complejas, sin build, sin node_modules.
+
+🔄 Actualizar la app
+Sube los nuevos archivos al repositorio sobreescribiendo los anteriores. GitHub Pages se actualiza en 1-2 minutos. Fuerza recarga con Ctrl+Shift+R (o cerrando completamente la app desde la multitarea en el móvil y volviéndola a abrir) para limpiar la caché del Service Worker.
