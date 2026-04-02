@@ -233,7 +233,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // --- 1. CONFIGURACIÓN FIREBASE ---
         let firebaseConfig = {
@@ -312,14 +312,16 @@
             }
         });
 
+        // BOTÓN LOGIN RESTAURADO AL CÓDIGO ORIGINAL QUE FUNCIONABA
         document.getElementById('btn-login').onclick = (e) => {
             e.preventDefault();
             const btnText = document.getElementById('btn-login-text');
+            const textoOriginal = btnText.innerText;
             btnText.innerText = '⏳ Conectando...';
             
-            signInWithRedirect(auth, provider).catch((error) => {
+            signInWithPopup(auth, provider).catch((error) => {
                 alert("Error al conectar: " + error.message);
-                btnText.innerText = 'Entrar con Google';
+                btnText.innerText = textoOriginal;
             });
         };
         
