@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <!-- CABECERA PRINCIPAL (Minimalista) -->
+    <!-- CABECERA PRINCIPAL -->
     <header class="bg-gray-50 dark:bg-gray-800 shadow-sm sticky top-0 z-30 transition-colors duration-300">
         <div class="max-w-md mx-auto p-4 flex justify-between items-center gap-2">
             <div class="flex items-center gap-2">
@@ -65,7 +65,6 @@
 
     <!-- MENÚ FLOTANTE UNIFICADO (FAB) -->
     <div class="fixed bottom-6 right-6 flex flex-col z-20 items-end hidden" id="fab-container">
-        <!-- Reemplazamos 'gap' por 'space-y-5' para forzar el margen y aumentamos el margen inferior (mb-6) -->
         <div id="menu-opciones" class="hidden flex-col space-y-5 items-end mb-6">
             <button id="btn-tema" class="px-4 py-2.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">🌙 Modo Oscuro</button>
             <button id="btn-hoy" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">📅 Ir a Hoy</button>
@@ -84,7 +83,53 @@
         </button>
     </div>
 
-    <!-- MODAL ESTADÍSTICAS (Sin gráficos) -->
+    <!-- MODAL ACTUACIONES -->
+    <div id="modal-actuaciones" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-end sm:items-center justify-center z-50 p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-gray-50 dark:bg-gray-800 w-full max-w-md sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl max-h-[90vh] flex flex-col border dark:border-gray-700 relative">
+            <div class="flex justify-between items-center mb-4 shrink-0">
+                <h3 class="text-xl font-black dark:text-white tracking-tight flex items-center gap-2">🚗 Actuaciones <span id="actuaciones-mes-label" class="text-blue-500 text-sm uppercase"></span></h3>
+                <button id="btn-cerrar-actuaciones" class="text-gray-400 text-4xl font-light leading-none">&times;</button>
+            </div>
+            
+            <div class="overflow-y-auto flex-1 pb-4">
+                <!-- Formulario -->
+                <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-600 mb-5 space-y-3">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-1">
+                            <label class="text-[10px] font-black uppercase text-gray-400 block mb-1">Fecha</label>
+                            <input type="date" id="act-fecha" class="w-full border-2 border-gray-100 dark:border-gray-600 rounded-xl p-2 bg-gray-50 dark:bg-gray-800 text-[11px] font-bold dark:text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-[10px] font-black uppercase text-gray-400 block mb-1">Origen</label>
+                            <input type="text" id="act-origen" placeholder="Ej: Sede Princesa" class="w-full border-2 border-gray-100 dark:border-gray-600 rounded-xl p-2 bg-gray-50 dark:bg-gray-800 text-[11px] font-bold dark:text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-gray-400 block mb-1">Destino</label>
+                        <input type="text" id="act-destino" placeholder="Ej: Juzgado Inst. 3" class="w-full border-2 border-gray-100 dark:border-gray-600 rounded-xl p-2 bg-gray-50 dark:bg-gray-800 text-[11px] font-bold dark:text-white focus:outline-none focus:border-blue-500 transition-colors">
+                    </div>
+                    <button id="btn-add-actuacion" class="w-full py-2.5 bg-blue-600 text-white rounded-xl font-black shadow-sm active:scale-95 transition-transform uppercase tracking-wider text-xs mt-2">Añadir Actuación</button>
+                </div>
+
+                <!-- Lista de actuaciones -->
+                <div>
+                    <p class="text-[10px] font-black uppercase text-gray-400 mb-2 px-1">Registros del mes</p>
+                    <div id="lista-actuaciones" class="space-y-2">
+                        <!-- Items renderizados dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2 shrink-0 pt-2 border-t dark:border-gray-700">
+                <button id="btn-exportar-actuaciones" class="w-full py-3.5 bg-emerald-600 text-white rounded-2xl font-black shadow-lg active:scale-95 transition-transform uppercase tracking-widest text-sm flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Descargar Excel Plantilla
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ESTADÍSTICAS -->
     <div id="modal-stats" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4 backdrop-blur-sm transition-opacity">
         <div class="bg-gray-50 dark:bg-gray-800 w-full max-w-sm rounded-3xl p-6 shadow-2xl overflow-y-auto max-h-[90vh] border dark:border-gray-700">
             <div class="flex justify-between items-center mb-6">
@@ -92,24 +137,20 @@
                 <button id="btn-cerrar-stats" class="text-gray-400 text-3xl font-light">&times;</button>
             </div>
             <div class="space-y-4">
-                <!-- Vacaciones -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
                     <div><p class="font-bold dark:text-white text-xs opacity-60">Vacaciones (V)</p><input type="number" id="input-base-v" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="22"></div>
                     <p class="text-xl font-black text-emerald-600"><span id="count-v">0</span> <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-v">22</span></p>
                 </div>
-                <!-- AAPP (Ahora por horas) -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
                     <div><p class="font-bold dark:text-white text-xs opacity-60">AAPP (Días base)</p><input type="number" id="input-base-ap" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="6"></div>
                     <div class="text-right">
                         <p class="text-xl font-black text-teal-600"><span id="count-ap-horas">0</span>h <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-ap-horas">48</span>h</p>
                     </div>
                 </div>
-                <!-- Horas extras -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
                     <p class="font-bold dark:text-white text-sm">Horas Extras</p>
                     <p class="text-xl font-black" id="total-horas-global">0h</p>
                 </div>
-                <!-- Resumen mes actual -->
                 <div id="resumen-mes-actual" class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-2xl border border-blue-100 dark:border-blue-800 shadow-sm">
                     <p class="text-[10px] font-black uppercase text-blue-400 mb-2">Este mes</p>
                     <div class="flex justify-between text-sm font-black dark:text-white">
@@ -118,7 +159,6 @@
                         <span>⏱️ <span id="horas-mes-actual">0h</span></span>
                     </div>
                 </div>
-                <!-- Desglose guardias -->
                 <div class="pt-2">
                     <p class="text-[10px] font-black uppercase text-gray-400 mb-2 px-1">Conteo de Guardias</p>
                     <div id="contenedor-desglose-guardias" class="grid grid-cols-2 gap-2 text-xs"></div>
@@ -137,9 +177,6 @@
             <p id="subtitulo-modal-diasemana" class="text-xs font-black uppercase text-blue-500 mb-5 tracking-widest"></p>
 
             <div id="vista-principal" class="grid grid-cols-2 gap-2 transition-opacity">
-                <!-- Columna Izquierda: M7, M8, M9, TARDE, SEDE... -->
-                <!-- Columna Derecha: GUARDIA..., LIBRANZA, FESTIVO, VACACIONES, INTENTO V. -->
-                
                 <!-- Fila 1 -->
                 <button class="opcion-turno p-4 rounded-2xl bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
                 <button id="btn-menu-guardias" class="p-4 rounded-2xl bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100 font-black text-sm shadow-sm active:scale-95 transition-transform">GUARDIA...</button>
@@ -181,7 +218,6 @@
             <!-- Sección Contadores y Nota (Oculta en Multi-select) -->
             <div id="seccion-nota-horas" class="mt-6 pt-5 border-t dark:border-gray-700">
                 <div class="flex flex-col gap-3 mb-5">
-                    <!-- Horas Extras -->
                     <div class="flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border border-gray-100 dark:border-gray-600">
                         <span class="text-[11px] font-black uppercase opacity-60">⏱️ HORAS EXTRAS</span>
                         <div class="flex items-center gap-4">
@@ -190,7 +226,6 @@
                             <button id="btn-sumar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90">+</button>
                         </div>
                     </div>
-                    <!-- AAPP -->
                     <div class="flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border border-gray-100 dark:border-gray-600">
                         <span class="text-[11px] font-black uppercase opacity-60">⏱️ AAPP</span>
                         <div class="flex items-center gap-4">
@@ -200,10 +235,8 @@
                         </div>
                     </div>
                 </div>
-
                 <label class="text-[10px] font-black uppercase text-gray-400 mb-2 block ml-1">Nota Personalizada</label>
                 <input type="text" id="input-nota" class="w-full border-2 border-gray-200 dark:border-gray-600 rounded-2xl p-4 bg-white dark:bg-gray-700 text-sm focus:ring-4 focus:ring-blue-500/20 outline-none transition-all shadow-inner mb-6" placeholder="Escribe algo para recordar...">
-                
                 <button id="btn-guardar-nota" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black shadow-xl active:scale-95 transition-transform uppercase tracking-widest text-sm">GUARDAR DÍA</button>
             </div>
         </div>
@@ -247,12 +280,14 @@
         let datosGuardias = {};
         let basesAnuales = {};
         let notasMes = {};
+        let datosActuaciones = {}; 
         let diaSeleccionadoStr = null;
         let soloLectura = localStorage.getItem('soloLectura') === 'true';
         let ocultarDinero = localStorage.getItem('ocultarDinero') === 'true';
         let modoMultiSelect = false;
         let diasSeleccionados = new Set();
         let guardandoNotaMes = false;
+        let mesActivoActuaciones = null; 
 
         const cloudStatus = document.getElementById('cloud-status');
         const contenedorMeses = document.getElementById('contenedor-meses');
@@ -272,7 +307,6 @@
             {nombre: 'Embajadores', sub: 'Emb.'}, {nombre: 'J. Camarillo 11', sub: 'J. Cam.'}
         ];
 
-        // Definición de colores para el grid (escala ajustada)
         const estilosT = {
             'M7':'bg-blue-100 text-blue-800 dark:bg-blue-900',
             'M8':'bg-blue-200 text-blue-800 dark:bg-blue-800', 
@@ -284,7 +318,6 @@
             'Sede': 'bg-purple-100 text-purple-800 dark:bg-purple-900'
         };
 
-        // --- DEFINICIÓN DE ICONOS SVG PARA EL FAB ---
         const svgMenu = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>';
         const svgClose = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
 
@@ -324,6 +357,7 @@
                     datosGuardias = d.guardias || {};
                     basesAnuales = d.bases || {};
                     notasMes = d.notasMes || {};
+                    datosActuaciones = d.actuaciones || {}; 
                     if (!guardandoNotaMes) cargarAnio(parseInt(selectAnio.value));
                     setCloudStatus('ok');
                 } else {
@@ -337,7 +371,13 @@
             guardandoNotaMes = esNotaMes;
             setCloudStatus('guardando');
             try {
-                await setDoc(doc(db, 'mis-guardias', uidActual, 'appData', 'estado'), { guardias: datosGuardias, bases: basesAnuales, notasMes: notasMes, updatedAt: new Date().toISOString() });
+                await setDoc(doc(db, 'mis-guardias', uidActual, 'appData', 'estado'), { 
+                    guardias: datosGuardias, 
+                    bases: basesAnuales, 
+                    notasMes: notasMes, 
+                    actuaciones: datosActuaciones, 
+                    updatedAt: new Date().toISOString() 
+                });
                 setCloudStatus('ok');
             } catch (err) { setCloudStatus('error'); }
             finally { guardandoNotaMes = false; }
@@ -380,6 +420,7 @@
             let html = `<div class="flex justify-between items-center mb-3">
                 <h2 class="font-black capitalize dark:text-white text-lg tracking-tight">${nombre}</h2>
                 <div class="flex gap-2 items-center">
+                    <button id="btn-car-${anio}-${mes}" class="bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 w-8 h-8 rounded-full flex items-center justify-center text-sm shadow-sm active:scale-95 transition-transform" title="Añadir Actuaciones">🚗</button>
                     <div id="badge-${anio}-${mes}" class="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 px-3 py-1.5 rounded-2xl text-[11px] font-black ${ocultarDinero?'hidden':''}">
                         <span id="total-${anio}-${mes}">0 €</span>
                     </div>
@@ -471,10 +512,207 @@
             wrap.innerHTML = html;
             wrap.appendChild(grid);
             wrap.appendChild(notaWrap);
+            
+            wrap.querySelector(`#btn-car-${anio}-${mes}`).onclick = () => window.abrirModalActuaciones(anio, mes, nombre);
+
             const spanTotal = wrap.querySelector(`#total-${anio}-${mes}`);
             if(spanTotal) spanTotal.textContent = totalMesRender.toFixed(2) + ' €';
             return wrap;
         }
+
+        // --- LÓGICA DE ACTUACIONES (EXCEL) ---
+
+        window.abrirModalActuaciones = function(anio, mes, nombreMes) {
+            mesActivoActuaciones = { anio, mes };
+            document.getElementById('actuaciones-mes-label').textContent = `${nombreMes} ${anio}`;
+            
+            const f = new Date();
+            if(f.getFullYear() === anio && f.getMonth() === mes) {
+                document.getElementById('act-fecha').value = f.toISOString().split('T')[0];
+            } else {
+                document.getElementById('act-fecha').value = `${anio}-${String(mes+1).padStart(2,'0')}-01`;
+            }
+            
+            document.getElementById('act-origen').value = '';
+            document.getElementById('act-destino').value = '';
+            
+            renderizarListaActuaciones();
+            document.getElementById('modal-actuaciones').classList.remove('hidden');
+        };
+
+        document.getElementById('btn-cerrar-actuaciones').onclick = () => {
+            document.getElementById('modal-actuaciones').classList.add('hidden');
+        };
+
+        document.getElementById('btn-add-actuacion').onclick = () => {
+            if(soloLectura) return;
+            const fecha = document.getElementById('act-fecha').value;
+            const origen = document.getElementById('act-origen').value.trim();
+            const destino = document.getElementById('act-destino').value.trim();
+            
+            if(!fecha || !origen || !destino) return alert('Por favor, rellena fecha, origen y destino.');
+            
+            const key = `${mesActivoActuaciones.anio}-${mesActivoActuaciones.mes}`;
+            if(!datosActuaciones[key]) datosActuaciones[key] = [];
+            
+            datosActuaciones[key].push({
+                id: Date.now().toString(),
+                fecha: fecha,
+                origen: origen,
+                destino: destino
+            });
+            
+            datosActuaciones[key].sort((a, b) => a.fecha.localeCompare(b.fecha));
+            
+            guardarTodo();
+            renderizarListaActuaciones();
+            
+            document.getElementById('act-origen').value = '';
+            document.getElementById('act-destino').value = '';
+            document.getElementById('act-origen').focus();
+        };
+
+        window.borrarActuacion = function(id) {
+            if(soloLectura) return;
+            const key = `${mesActivoActuaciones.anio}-${mesActivoActuaciones.mes}`;
+            if(datosActuaciones[key]) {
+                datosActuaciones[key] = datosActuaciones[key].filter(a => a.id !== id);
+                guardarTodo();
+                renderizarListaActuaciones();
+            }
+        };
+
+        function renderizarListaActuaciones() {
+            const key = `${mesActivoActuaciones.anio}-${mesActivoActuaciones.mes}`;
+            const lista = datosActuaciones[key] || [];
+            const container = document.getElementById('lista-actuaciones');
+            container.innerHTML = '';
+            
+            if(lista.length === 0) {
+                container.innerHTML = '<p class="text-xs text-gray-400 text-center py-6 font-medium italic border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-xl">Ningún registro este mes.</p>';
+                return;
+            }
+            
+            lista.forEach(a => {
+                const item = document.createElement('div');
+                item.className = 'bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl flex justify-between items-center border border-gray-200 dark:border-gray-600 gap-2';
+                
+                const partes = a.fecha.split('-');
+                const fStr = `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+                item.innerHTML = `
+                    <div class="flex-1 overflow-hidden">
+                        <p class="text-[10px] font-black text-blue-600 dark:text-blue-400 mb-0.5">${fStr}</p>
+                        <p class="text-xs font-bold dark:text-gray-200 truncate">🚗 <span class="opacity-80 font-normal">De:</span> ${a.origen}</p>
+                        <p class="text-xs font-bold dark:text-gray-200 truncate">📍 <span class="opacity-80 font-normal">A:</span> ${a.destino}</p>
+                    </div>
+                    <button class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/40 text-red-600 flex items-center justify-center active:scale-90 transition-transform shadow-sm" onclick="window.borrarActuacion('${a.id}')">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        document.getElementById('btn-exportar-actuaciones').onclick = () => {
+            const key = `${mesActivoActuaciones.anio}-${mesActivoActuaciones.mes}`;
+            const lista = datosActuaciones[key] || [];
+            
+            if(lista.length === 0) return alert('No hay nada que exportar este mes.');
+            
+            const mesesNombres = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+            const nombreMesMayus = mesesNombres[mesActivoActuaciones.mes];
+
+            let csvContent = "";
+            csvContent += ",,,,,,,,,,,,,,\n";
+            csvContent += `INFORME DE GASTOS,,,,,,TELEFONICA SOLUCIONES DE OUTSORCING,,,,,MES:,${nombreMesMayus},,\n`;
+            csvContent += ",,,,,,,,,,,,,,\n";
+            csvContent += "EMPLEADO:,KAIO FERREIRA DIAS,,,,,,,,,SUPERVISOR:,Almudena Gómez Guinea,,,\n";
+            csvContent += ",,,,,,,,,,,,,,\n";
+            csvContent += 'Día,Origen / Destino,"Media Dieta sin pernocta (29,00€)",,"Dieta Completa con renuncia a hotel (58,00€)",,"Dieta Completa con hotel de empresa (29,00€)",,Kms. si coche particular,,Otros Gastos con IVA,,Otros Gastos sin IVA,,Importe Total\n';
+            csvContent += ',,,,,,,,Kms.,"Importe (0,20€/Km)",Importe,Descripción,Importe,Descripción,\n';
+
+            const maxDataRows = Math.max(36, lista.length);
+            for (let i = 0; i < maxDataRows; i++) {
+                if (i < lista.length) {
+                    const a = lista[i];
+                    const p = a.fecha.split('-');
+                    const fechaFormateada = `${p[2]}/${p[1]}/${p[0]}`;
+                    const orig = a.origen.replace(/"/g, '""');
+                    const dest = a.destino.replace(/"/g, '""');
+                    // Escribimos la fecha en la col A y Origen - Destino en la B, seguido de las 13 comas vacias para rellenar las 15 columnas del template.
+                    csvContent += `${fechaFormateada},"${orig} - ${dest}",,,,,,,,,,,,,\n`;
+                } else {
+                    csvContent += ",,,,,,,,,,,,,,\n";
+                }
+            }
+
+            csvContent += ",,0,0,0,0,0,0,0,0,0,,0,,\n";
+            csvContent += '"IMPORTANTE: Es imprescindible adjuntar tickets de parking, taxi, peaje y otros gastos cuando se detallen en el informe",,,,,,,,,,,,TOTAL A PAGAR EMPLEADO,,0\n';
+            csvContent += ",,,,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,,,\n";
+            csvContent += "Firma Empleado:,,,,,,,,,,Firma Supervisor,,,,\n";
+            csvContent += ",,,,,,,,,,,,,,\n";
+            
+            // Tabla secundaria
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += `INFORME DE TRABAJOS EXTRA,,,TELEFONICA SOLUCIONES DE OUTSORCING,,MES:,${nombreMesMayus},,,,,,\n`;
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += "EMPLEADO:,,,,SUPERVISOR:,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += 'Fecha,Día de la Semana,CGE/CGA/Proyecto,Descripción de los Trabajos,"Horas extra laborable (23,00€)",,"Horas extra fin de semana/festivo (25,00€)",,Importe Total,,,,\n';
+            csvContent += ",,,,,,,,,,,,Lunes\n";
+            csvContent += ",,,,,,,,,,,,Martes\n";
+            csvContent += ",,,,,,,,,,,,Miércoles\n";
+            csvContent += ",,,,,,,,,,,,Jueves\n";
+            csvContent += ",,,,,,,,,,,,Viernes\n";
+            csvContent += ",,,,,,,,,,,,Sábado\n";
+            csvContent += ",,,,,,,,,,,,Domingo\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,0,0,0,0,,,,,\n";
+            csvContent += ",,,,TOTAL A PAGAR EMPLEADO,,,,0,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += ",,,,,,,,,,,,\n";
+            csvContent += "Firma Empleado:,,,,Firma Supervisor,,,,,,,,\n";
+
+            // Encodear archivo para correcta lectura de tildes/eñes en Excel
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            
+            const nombreMesExcel = String(mesActivoActuaciones.mes + 1).padStart(2, '0');
+            link.setAttribute("download", `Actuaciones_${mesActivoActuaciones.anio}_${nombreMesExcel}.csv`);
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // --- FIN LÓGICA ACTUACIONES ---
+
 
         function revisarBloqueoAAPP(val, tituloOrig) {
             const grid = document.getElementById('vista-principal');
