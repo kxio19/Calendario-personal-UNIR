@@ -232,7 +232,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { initializeFirestore, persistentLocalCache, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // --- 1. CONFIGURACIÓN FIREBASE ---
         let firebaseConfig = {
@@ -311,7 +311,19 @@
             }
         });
 
-        document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('btn-login').onclick = () => {
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '⏳ Conectando...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+            
+            signInWithRedirect(auth, provider).catch(error => {
+                alert("Error de conexión: " + error.message + "\n\nAsegúrate de probarlo desde GitHub y no desde un archivo local.");
+                btn.innerHTML = 'Entrar con Google';
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+        };
         
         function cerrarFab() {
             fabMenu.classList.add('hidden');
