@@ -64,7 +64,7 @@
     <main id="contenedor-meses" class="max-w-md mx-auto p-4 space-y-6 hidden"></main>
 
     <!-- MENÚ FLOTANTE UNIFICADO (FAB) -->
-    <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-20 items-end hidden" id="fab-container">
+    <div class="fixed bottom-6 right-6 flex flex-col gap-3.5 z-20 items-end hidden" id="fab-container">
         <div id="menu-opciones" class="hidden flex-col gap-3.5 items-end mb-3">
             <button id="btn-tema" class="px-5 py-3.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">🌙 Modo Oscuro</button>
             <button id="btn-hoy" class="px-5 py-3.5 bg-blue-600 text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">📅 Ir a Hoy</button>
@@ -73,11 +73,11 @@
             <button id="btn-toggle-candado" class="px-5 py-3.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">🔓 Habilitar Edición</button>
             <button id="btn-logout" class="px-5 py-3.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">🚪 Salir</button>
         </div>
-        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
-            <svg id="icono-fab-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-            <span id="icono-fab-text" class="hidden text-2xl font-black leading-none pb-0.5">✕</span>
+        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-90 transition-transform">
+            <span id="icono-fab">
+                <!-- Icono 3 rayas (hamburguesa) por defecto -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </span>
         </button>
     </div>
 
@@ -335,7 +335,7 @@
 
         function setCloudStatus(estado) {
             cloudStatus.textContent = '☁️';
-            cloudStatus.className = `text-base w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-500 text-white':(estado==='guardando'?'bg-yellow-400 text-white pulsing':'bg-red-500 text-white')}`;
+            cloudStatus.className = `text-[12px] px-2.5 py-1.5 rounded-full font-bold flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' : (estado==='guardando'?'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 pulsing':'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300')}`;
         }
 
         function iniciarSincronizacion() {
@@ -655,22 +655,17 @@
 
         document.getElementById('btn-cerrar-modal').onclick = cerrarModalTurno;
 
-        // --- 6. FAB Y CONTROLES GENERALES ---
+       // --- 6. FAB Y CONTROLES GENERALES ---
         const btnFabMain = document.getElementById('btn-fab-main');
-        const fabMenu = document.getElementById('menu-opciones');
-        const iconoFabSvg = document.getElementById('icono-fab-svg');
-        const iconoFabText = document.getElementById('icono-fab-text');
+        const iconoFab = document.getElementById('icono-fab');
+        
+        const iconMenu = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>`;
+        const iconClose = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>`;
         
         btnFabMain.onclick = () => {
             const oculto = fabMenu.classList.contains('hidden');
             fabMenu.classList.toggle('hidden');
-            if(oculto) {
-                iconoFabSvg.classList.add('hidden');
-                iconoFabText.classList.remove('hidden');
-            } else {
-                iconoFabSvg.classList.remove('hidden');
-                iconoFabText.classList.add('hidden');
-            }
+            iconoFab.innerHTML = oculto ? iconClose : iconMenu;
         };
 
         function actualizarTextosMenu() {
@@ -678,13 +673,12 @@
             document.getElementById('btn-toggle-candado').innerHTML = soloLectura ? '🔒 Habilitar Edición' : '🔓 Bloquear Edición';
         }
 
-        document.getElementById('btn-tema').onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); actualizarTextosMenu(); cerrarFab(); };
-        document.getElementById('btn-toggle-candado').onclick = () => { soloLectura = !soloLectura; localStorage.setItem('soloLectura', soloLectura); actualizarTextosMenu(); cerrarFab(); };
-        document.getElementById('btn-hoy').onclick = () => { selectAnio.value = hoy.getFullYear(); cargarAnio(hoy.getFullYear()); cerrarFab(); setTimeout(() => { const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`); if(el) el.scrollIntoView({behavior:'smooth', block: 'start'}); }, 100); };
-        document.getElementById('btn-abrir-stats').onclick = () => { document.getElementById('modal-stats').classList.remove('hidden'); actualizarEstadisticas(parseInt(selectAnio.value)); cerrarFab(); };
+        document.getElementById('btn-tema').onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); actualizarTextosMenu(); fabMenu.classList.add('hidden'); iconoFab.innerHTML = iconMenu; };
+        document.getElementById('btn-toggle-candado').onclick = () => { soloLectura = !soloLectura; localStorage.setItem('soloLectura', soloLectura); actualizarTextosMenu(); fabMenu.classList.add('hidden'); iconoFab.innerHTML = iconMenu; };
+        document.getElementById('btn-hoy').onclick = () => { selectAnio.value = hoy.getFullYear(); cargarAnio(hoy.getFullYear()); fabMenu.classList.add('hidden'); iconoFab.innerHTML = iconMenu; setTimeout(() => { const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`); if(el) el.scrollIntoView({behavior:'smooth', block: 'start'}); }, 100); };
+        document.getElementById('btn-abrir-stats').onclick = () => { document.getElementById('modal-stats').classList.remove('hidden'); actualizarEstadisticas(parseInt(selectAnio.value)); fabMenu.classList.add('hidden'); iconoFab.innerHTML = iconMenu; };
         document.getElementById('btn-cerrar-stats').onclick = () => document.getElementById('modal-stats').classList.add('hidden');
         document.getElementById('btn-toggle-dinero').onclick = () => { ocultarDinero = !ocultarDinero; localStorage.setItem('ocultarDinero', ocultarDinero); cargarAnio(parseInt(selectAnio.value)); };
-
         document.getElementById('input-base-v').oninput = () => { basesAnuales[parseInt(selectAnio.value)] = { v: parseInt(document.getElementById('input-base-v').value) || 22, ap: parseInt(document.getElementById('input-base-ap').value) || 6 }; guardarTodo(); actualizarEstadisticas(parseInt(selectAnio.value)); };
         document.getElementById('input-base-ap').oninput = document.getElementById('input-base-v').oninput;
 
