@@ -65,14 +65,14 @@
 
     <!-- MENÚ FLOTANTE UNIFICADO (FAB) -->
     <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-20 items-end hidden" id="fab-container">
-        <!-- AQUÍ SE APLICÓ EL CAMBIO: gap-4 en lugar de gap-2 y mb-4 en lugar de mb-2 -->
-        <div id="menu-opciones" class="hidden flex-col gap-4 items-end mb-4">
-            <button id="btn-tema" class="px-4 py-2.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🌙 Modo Oscuro</button>
-            <button id="btn-hoy" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">📅 Ir a Hoy</button>
-            <button id="btn-multi-select" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2 border border-blue-100 dark:border-gray-600">☑️ Selección Múltiple</button>
-            <button id="btn-abrir-stats" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">📊 Estadísticas</button>
-            <button id="btn-toggle-candado" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🔓 Habilitar Edición</button>
-            <button id="btn-logout" class="px-4 py-2.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🚪 Salir</button>
+        <!-- AQUÍ AUMENTÉ LA SEPARACIÓN: gap-6 (más espacio entre botones) y mb-6 (más espacio respecto al botón de las rayas) -->
+        <div id="menu-opciones" class="hidden flex-col gap-6 items-end mb-6">
+            <button id="btn-tema" class="px-4 py-2.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">🌙 Modo Oscuro</button>
+            <button id="btn-hoy" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">📅 Ir a Hoy</button>
+            <button id="btn-multi-select" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 border border-blue-100 dark:border-gray-600">☑️ Selección Múltiple</button>
+            <button id="btn-abrir-stats" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">📊 Estadísticas</button>
+            <button id="btn-toggle-candado" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">🔓 Habilitar Edición</button>
+            <button id="btn-logout" class="px-4 py-2.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">🚪 Salir</button>
         </div>
         <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-90 transition-transform">
             <!-- Icono de Menú SVG (3 rayas) -->
