@@ -44,7 +44,7 @@
                     <select id="select-anio" class="appearance-none bg-transparent text-xl font-black text-gray-800 dark:text-gray-100 focus:outline-none cursor-pointer pr-4"></select>
                     <span class="absolute right-0 top-1.5 text-xs pointer-events-none opacity-50">▼</span>
                 </div>
-                <span id="cloud-status" class="text-base w-8 h-8 rounded-full font-bold hidden items-center justify-center shadow-sm transition-colors duration-500">☁️</span>
+                <span id="cloud-status" class="text-base w-8 h-8 rounded-full hidden items-center justify-center shadow-sm transition-colors duration-500">☁️</span>
                 <span id="alerta-vacaciones" class="hidden text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200 font-black alerta-vacaciones">⚠️ Pocos días V</span>
             </div>
             <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-3 py-1.5 rounded-xl text-sm font-black shadow-sm flex items-center gap-1 active:scale-95">
@@ -65,23 +65,23 @@
 
     <!-- MENÚ FLOTANTE UNIFICADO (FAB) -->
     <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-20 items-end hidden" id="fab-container">
-        <div id="menu-opciones" class="hidden flex-col gap-3.5 items-end mb-2">
-            <button id="btn-tema" class="w-52 px-5 py-3.5 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 transition-transform active:scale-95">
-                🌙 Modo Oscuro
-            </button>
-            <button id="btn-hoy" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                📅 Ir a Hoy
-            </button>
-            <button id="btn-multi-select" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                ☑️ Selección Múltiple
-            </button>
-            <button id="btn-abrir-stats" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                📊 Estadísticas
-            </button>
-            <button id="btn-toggle-candado" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                🔓 Habilitar Edición
-            </button>
-            <button id="btn-logout" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
+        <div id="menu-opciones" class="hidden flex-col gap-3.5 items-end mb-3">
+            <button id="btn-tema" class="px-5 py-3.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">🌙 Modo Oscuro</button>
+            <button id="btn-hoy" class="px-5 py-3.5 bg-blue-600 text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">📅 Ir a Hoy</button>
+            <button id="btn-multi-select" class="px-5 py-3.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 border border-blue-100 dark:border-gray-600 transition-transform active:scale-95">☑️ Selección Múltiple</button>
+            <button id="btn-abrir-stats" class="px-5 py-3.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">📊 Estadísticas</button>
+            <button id="btn-toggle-candado" class="px-5 py-3.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">🔓 Habilitar Edición</button>
+            <button id="btn-logout" class="px-5 py-3.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">🚪 Salir</button>
+        </div>
+        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
+            <svg id="icono-fab-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <span id="icono-fab-text" class="hidden text-2xl font-black leading-none pb-0.5">✕</span>
+        </button>
+    </div>
+
+    <!-- MODAL ESTADÍSTICAS (Sin gráficos) -->
                 🚪 Salir
             </button>
         </div>
@@ -320,22 +320,22 @@
             btnText.innerText = '⏳ Conectando...';
             
             signInWithPopup(auth, provider).catch((error) => {
-                alert("Error al conectar: " + error.message);
-                btnText.innerText = textoOriginal;
-            });
-        };
+        document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
         
         function cerrarFab() {
-            fabMenu.classList.add('hidden');
-            document.getElementById('icono-fab-svg').classList.remove('hidden');
-            document.getElementById('icono-fab-text').classList.add('hidden');
+            const menu = document.getElementById('menu-opciones');
+            const svg = document.getElementById('icono-fab-svg');
+            const txt = document.getElementById('icono-fab-text');
+            if(menu) menu.classList.add('hidden');
+            if(svg) svg.classList.remove('hidden');
+            if(txt) txt.classList.add('hidden');
         }
         
         document.getElementById('btn-logout').onclick = () => { cerrarFab(); signOut(auth); };
 
         function setCloudStatus(estado) {
             cloudStatus.textContent = '☁️';
-            cloudStatus.className = `text-base w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-500 text-white':(estado==='guardando'?'bg-yellow-400 text-white pulsing':'bg-red-500 text-white')}`;
+            cloudStatus.className = `text-base w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-500 text-white':(estado==='guardando'?'bg-yellow-400 text-white pulsing':'bg-red-500 text-white')}`;
         }
 
         function iniciarSincronizacion() {
@@ -676,14 +676,6 @@
         function actualizarTextosMenu() {
             document.getElementById('btn-tema').innerHTML = document.documentElement.classList.contains('dark') ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
             document.getElementById('btn-toggle-candado').innerHTML = soloLectura ? '🔒 Habilitar Edición' : '🔓 Bloquear Edición';
-            
-            if (modoMultiSelect) {
-                document.getElementById('btn-multi-select').innerHTML = '☑️ Cancelar Selección';
-                document.getElementById('btn-multi-select').classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-500');
-            } else {
-                document.getElementById('btn-multi-select').innerHTML = '☑️ Selección Múltiple';
-                document.getElementById('btn-multi-select').classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-500');
-            }
         }
 
         document.getElementById('btn-tema').onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); actualizarTextosMenu(); cerrarFab(); };
@@ -704,7 +696,7 @@
                 diasSeleccionados.clear();
                 document.getElementById('banner-multi').classList.remove('hidden');
                 document.getElementById('banner-multi').classList.add('flex');
-                actualizarTextosMenu();
+                document.getElementById('btn-multi-select').classList.add('bg-blue-100', 'border-blue-500');
                 cerrarFab();
             }
             cargarAnio(parseInt(selectAnio.value));
