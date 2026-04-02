@@ -10,6 +10,8 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería SheetJS para generar Excel nativo (.xlsx) -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
         body { -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation; }
@@ -74,7 +76,6 @@
             <button id="btn-logout" class="px-4 py-2.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-sm shadow-lg flex items-center gap-2">🚪 Salir</button>
         </div>
         <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-90 transition-transform">
-            <!-- Icono de Menú SVG (3 rayas) -->
             <span id="icono-fab">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -123,7 +124,7 @@
             <div class="mt-2 shrink-0 pt-2 border-t dark:border-gray-700">
                 <button id="btn-exportar-actuaciones" class="w-full py-3.5 bg-emerald-600 text-white rounded-2xl font-black shadow-lg active:scale-95 transition-transform uppercase tracking-widest text-sm flex items-center justify-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Descargar Excel Plantilla
+                    Descargar Excel Oficial (.xlsx)
                 </button>
             </div>
         </div>
@@ -520,7 +521,7 @@
             return wrap;
         }
 
-        // --- LÓGICA DE ACTUACIONES (EXCEL) ---
+        // --- LÓGICA DE ACTUACIONES (NUEVA DESCARGA EXCEL NATIVO) ---
 
         window.abrirModalActuaciones = function(anio, mes, nombreMes) {
             mesActivoActuaciones = { anio, mes };
@@ -614,101 +615,94 @@
             });
         }
 
+        // Exportación usando SheetJS (crea un .xlsx nativo)
         document.getElementById('btn-exportar-actuaciones').onclick = () => {
             const key = `${mesActivoActuaciones.anio}-${mesActivoActuaciones.mes}`;
             const lista = datosActuaciones[key] || [];
             
             if(lista.length === 0) return alert('No hay nada que exportar este mes.');
+            if (typeof XLSX === "undefined") return alert("Cargando generador de Excel, inténtalo de nuevo en unos segundos.");
             
             const mesesNombres = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
             const nombreMesMayus = mesesNombres[mesActivoActuaciones.mes];
 
-            let csvContent = "";
-            csvContent += ",,,,,,,,,,,,,,\n";
-            csvContent += `INFORME DE GASTOS,,,,,,TELEFONICA SOLUCIONES DE OUTSORCING,,,,,MES:,${nombreMesMayus},,\n`;
-            csvContent += ",,,,,,,,,,,,,,\n";
-            csvContent += "EMPLEADO:,KAIO FERREIRA DIAS,,,,,,,,,SUPERVISOR:,Almudena Gómez Guinea,,,\n";
-            csvContent += ",,,,,,,,,,,,,,\n";
-            csvContent += 'Día,Origen / Destino,"Media Dieta sin pernocta (29,00€)",,"Dieta Completa con renuncia a hotel (58,00€)",,"Dieta Completa con hotel de empresa (29,00€)",,Kms. si coche particular,,Otros Gastos con IVA,,Otros Gastos sin IVA,,Importe Total\n';
-            csvContent += ',,,,,,,,Kms.,"Importe (0,20€/Km)",Importe,Descripción,Importe,Descripción,\n';
+            // Construir la matriz de datos para el Excel
+            const ws_data = [];
+            
+            ws_data.push([]); // Fila 1 vacía
+            ws_data.push(["INFORME DE GASTOS", "", "", "", "", "", "TELEFONICA SOLUCIONES DE OUTSORCING", "", "", "", "", "MES:", nombreMesMayus]); // Fila 2
+            ws_data.push([]); // Fila 3
+            ws_data.push(["EMPLEADO:", "KAIO FERREIRA DIAS", "", "", "", "", "", "", "", "SUPERVISOR:", "Almudena Gómez Guinea"]); // Fila 4
+            ws_data.push([]); // Fila 5
+            ws_data.push(["Día", "Origen / Destino", "Media Dieta sin pernocta (29,00€)", "", "Dieta Completa con renuncia a hotel (58,00€)", "", "Dieta Completa con hotel de empresa (29,00€)", "", "Kms. si coche particular", "", "Otros Gastos con IVA", "", "Otros Gastos sin IVA", "", "Importe Total"]); // Fila 6
+            ws_data.push(["", "", "", "", "", "", "", "", "Kms.", "Importe (0,20€/Km)", "Importe", "Descripción", "Importe", "Descripción", ""]); // Fila 7
 
+            // Insertar datos de actuaciones
             const maxDataRows = Math.max(36, lista.length);
             for (let i = 0; i < maxDataRows; i++) {
                 if (i < lista.length) {
                     const a = lista[i];
                     const p = a.fecha.split('-');
                     const fechaFormateada = `${p[2]}/${p[1]}/${p[0]}`;
-                    const orig = a.origen.replace(/"/g, '""');
-                    const dest = a.destino.replace(/"/g, '""');
-                    // Escribimos la fecha en la col A y Origen - Destino en la B, seguido de las 13 comas vacias para rellenar las 15 columnas del template.
-                    csvContent += `${fechaFormateada},"${orig} - ${dest}",,,,,,,,,,,,,\n`;
+                    ws_data.push([fechaFormateada, `${a.origen} - ${a.destino}`]); // Escribe en columna A y B
                 } else {
-                    csvContent += ",,,,,,,,,,,,,,\n";
+                    ws_data.push([]);
                 }
             }
 
-            csvContent += ",,0,0,0,0,0,0,0,0,0,,0,,\n";
-            csvContent += '"IMPORTANTE: Es imprescindible adjuntar tickets de parking, taxi, peaje y otros gastos cuando se detallen en el informe",,,,,,,,,,,,TOTAL A PAGAR EMPLEADO,,0\n';
-            csvContent += ",,,,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,,,\n";
-            csvContent += "Firma Empleado:,,,,,,,,,,Firma Supervisor,,,,\n";
-            csvContent += ",,,,,,,,,,,,,,\n";
+            ws_data.push(["", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, "", ""]);
+            ws_data.push(["IMPORTANTE: Es imprescindible adjuntar tickets de parking, taxi, peaje y otros gastos cuando se detallen en el informe", "", "", "", "", "", "", "", "", "", "", "", "TOTAL A PAGAR EMPLEADO", "", 0]);
+            ws_data.push([]);
+            ws_data.push([]);
+            ws_data.push(["Firma Empleado:", "", "", "", "", "", "", "", "", "", "Firma Supervisor"]);
+            ws_data.push([]);
+            ws_data.push([]);
+            ws_data.push(["INFORME DE TRABAJOS EXTRA", "", "", "TELEFONICA SOLUCIONES DE OUTSORCING", "", "MES:", nombreMesMayus]);
+            ws_data.push([]);
+            ws_data.push(["EMPLEADO:", "", "", "", "SUPERVISOR:"]);
+            ws_data.push([]);
+            ws_data.push(["Fecha", "Día de la Semana", "CGE/CGA/Proyecto", "Descripción de los Trabajos", "Horas extra laborable (23,00€)", "", "Horas extra fin de semana/festivo (25,00€)", "", "Importe Total"]);
             
-            // Tabla secundaria
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += `INFORME DE TRABAJOS EXTRA,,,TELEFONICA SOLUCIONES DE OUTSORCING,,MES:,${nombreMesMayus},,,,,,\n`;
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += "EMPLEADO:,,,,SUPERVISOR:,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += 'Fecha,Día de la Semana,CGE/CGA/Proyecto,Descripción de los Trabajos,"Horas extra laborable (23,00€)",,"Horas extra fin de semana/festivo (25,00€)",,Importe Total,,,,\n';
-            csvContent += ",,,,,,,,,,,,Lunes\n";
-            csvContent += ",,,,,,,,,,,,Martes\n";
-            csvContent += ",,,,,,,,,,,,Miércoles\n";
-            csvContent += ",,,,,,,,,,,,Jueves\n";
-            csvContent += ",,,,,,,,,,,,Viernes\n";
-            csvContent += ",,,,,,,,,,,,Sábado\n";
-            csvContent += ",,,,,,,,,,,,Domingo\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,0,0,0,0,,,,,\n";
-            csvContent += ",,,,TOTAL A PAGAR EMPLEADO,,,,0,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += ",,,,,,,,,,,,\n";
-            csvContent += "Firma Empleado:,,,,Firma Supervisor,,,,,,,,\n";
+            const diasExtra = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+            for (let i = 0; i < 31; i++) {
+                let row = [];
+                // Ponemos los días de la semana en la columna M (índice 12) como en el original
+                row[12] = (i < diasExtra.length ? diasExtra[i] : ""); 
+                ws_data.push(row);
+            }
+            
+            ws_data.push(["", "", "", "", 0, 0, 0, 0]);
+            ws_data.push(["", "", "", "", "TOTAL A PAGAR EMPLEADO", "", "", "", 0]);
+            ws_data.push([]);
+            ws_data.push([]);
+            ws_data.push(["Firma Empleado:", "", "", "", "Firma Supervisor"]);
 
-            // Encodear archivo para correcta lectura de tildes/eñes en Excel
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
+            // Crear la hoja y el libro
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
             
+            // Asignar anchos a las columnas para que no se vea aplastado
+            ws['!cols'] = [
+                {wch: 12}, // A: Día
+                {wch: 45}, // B: Origen / Destino
+                {wch: 15}, // C: Media Dieta
+                {wch: 10}, // D:
+                {wch: 15}, // E: Dieta Completa
+                {wch: 10}, // F:
+                {wch: 15}, // G: Hotel
+                {wch: 10}, // H:
+                {wch: 10}, // I: Kms
+                {wch: 15}, // J: Importe Km
+                {wch: 10}, // K: Importe IVA
+                {wch: 15}, // L: Descripcion
+                {wch: 15}  // M: Otros
+            ];
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Gastos y Extras");
+
+            // Descargar archivo Excel oficial
             const nombreMesExcel = String(mesActivoActuaciones.mes + 1).padStart(2, '0');
-            link.setAttribute("download", `Actuaciones_${mesActivoActuaciones.anio}_${nombreMesExcel}.csv`);
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            XLSX.writeFile(wb, `Actuaciones_Kaio_${mesActivoActuaciones.anio}_${nombreMesExcel}.xlsx`);
         };
 
         // --- FIN LÓGICA ACTUACIONES ---
