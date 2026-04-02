@@ -44,7 +44,7 @@
                     <select id="select-anio" class="appearance-none bg-transparent text-xl font-black text-gray-800 dark:text-gray-100 focus:outline-none cursor-pointer pr-4"></select>
                     <span class="absolute right-0 top-1.5 text-xs pointer-events-none opacity-50">▼</span>
                 </div>
-                <span id="cloud-status" class="text-base w-8 h-8 rounded-full font-bold hidden items-center justify-center shadow-sm transition-colors duration-500">☁️</span>
+                <span id="cloud-status" class="text-[10px] px-2 py-1 rounded-full font-bold hidden items-center justify-center shadow-sm transition-colors duration-500">☁️</span>
                 <span id="alerta-vacaciones" class="hidden text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-200 font-black alerta-vacaciones">⚠️ Pocos días V</span>
             </div>
             <button id="btn-toggle-dinero" class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100 px-3 py-1.5 rounded-xl text-sm font-black shadow-sm flex items-center gap-1 active:scale-95">
@@ -52,11 +52,11 @@
             </button>
         </div>
         <!-- Banner modo selección múltiple -->
-        <div id="banner-multi" class="hidden bg-blue-600 text-white text-xs font-black text-center py-2 px-4 flex items-center justify-between max-w-md mx-auto shadow-md">
+        <div id="banner-multi" class="hidden bg-blue-600 text-white text-xs font-black text-center py-2 px-4 flex items-center justify-between max-w-md mx-auto">
             <span>☑️ MODO MÚLTIPLE — <span id="count-seleccionados">0</span> días</span>
             <div class="flex gap-2">
-                <button id="btn-aplicar-multi" class="bg-white text-blue-600 px-3 py-1.5 rounded-lg font-black shadow-sm active:scale-95">APLICAR</button>
-                <button id="btn-cancelar-multi" class="opacity-80 px-2 py-1.5 rounded-lg font-black border border-white/40 active:scale-95">✕</button>
+                <button id="btn-aplicar-multi" class="bg-white text-blue-600 px-3 py-1 rounded-lg font-black shadow-sm">APLICAR</button>
+                <button id="btn-cancelar-multi" class="opacity-70 px-2 py-1 rounded-lg font-black border border-white/30">✕</button>
             </div>
         </div>
     </header>
@@ -65,31 +65,16 @@
 
     <!-- MENÚ FLOTANTE UNIFICADO (FAB) -->
     <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-20 items-end hidden" id="fab-container">
-        <div id="menu-opciones" class="hidden flex-col gap-3.5 items-end mb-2">
-            <button id="btn-tema" class="w-52 px-5 py-3.5 bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 transition-transform active:scale-95">
-                🌙 Modo Oscuro
-            </button>
-            <button id="btn-hoy" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                📅 Ir a Hoy
-            </button>
-            <button id="btn-multi-select" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                ☑️ Selección Múltiple
-            </button>
-            <button id="btn-abrir-stats" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                📊 Estadísticas
-            </button>
-            <button id="btn-toggle-candado" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                🔓 Habilitar Edición
-            </button>
-            <button id="btn-logout" class="w-52 px-5 py-3.5 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl font-black text-sm shadow-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700 transition-transform active:scale-95">
-                🚪 Salir
-            </button>
+        <div id="menu-opciones" class="hidden flex-col gap-2 items-end mb-2">
+            <button id="btn-tema" class="px-4 py-2.5 bg-gray-800 dark:bg-white text-white dark:text-gray-900 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🌙 Modo Oscuro</button>
+            <button id="btn-hoy" class="px-4 py-2.5 bg-blue-600 text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">📅 Ir a Hoy</button>
+            <button id="btn-multi-select" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2 border border-blue-100 dark:border-gray-600">☑️ Selección Múltiple</button>
+            <button id="btn-abrir-stats" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">📊 Estadísticas</button>
+            <button id="btn-toggle-candado" class="px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🔓 Habilitar Edición</button>
+            <button id="btn-logout" class="px-4 py-2.5 bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 rounded-2xl font-black text-xs shadow-lg flex items-center gap-2">🚪 Salir</button>
         </div>
-        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
-            <svg id="icono-fab-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-            <span id="icono-fab-text" class="hidden text-2xl font-black leading-none pb-0.5">✕</span>
+        <button id="btn-fab-main" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-90 transition-transform">
+            <span id="icono-fab">🍔</span>
         </button>
     </div>
 
@@ -106,7 +91,7 @@
                     <div><p class="font-bold dark:text-white text-xs opacity-60">Vacaciones (V)</p><input type="number" id="input-base-v" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="22"></div>
                     <p class="text-xl font-black text-emerald-600"><span id="count-v">0</span> <span class="text-xs text-gray-400 font-normal">/</span> <span id="display-base-v">22</span></p>
                 </div>
-                <!-- AAPP (Por horas) -->
+                <!-- AAPP (Ahora por horas) -->
                 <div class="bg-white dark:bg-gray-700 p-4 rounded-2xl flex justify-between items-center shadow-sm border border-gray-100 dark:border-gray-600">
                     <div><p class="font-bold dark:text-white text-xs opacity-60">AAPP (Días base)</p><input type="number" id="input-base-ap" class="mt-1 w-14 text-sm font-bold border rounded p-1 dark:bg-gray-600 dark:text-white text-center" value="6"></div>
                     <div class="text-right">
@@ -146,7 +131,8 @@
             <p id="subtitulo-modal-diasemana" class="text-xs font-black uppercase text-blue-500 mb-5 tracking-widest"></p>
 
             <div id="vista-principal" class="grid grid-cols-2 gap-2 transition-opacity">
-                <!-- Columna Izquierda (Turnos + Sede) / Columna Derecha (Guardias y Libres) -->
+                <!-- Columna Izquierda: M7, M8, M9, TARDE, SEDE... -->
+                <!-- Columna Derecha: GUARDIA..., LIBRANZA, FESTIVO, VACACIONES, INTENTO V. -->
                 
                 <!-- Fila 1 -->
                 <button class="opcion-turno p-4 rounded-2xl bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
@@ -193,18 +179,18 @@
                     <div class="flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border border-gray-100 dark:border-gray-600">
                         <span class="text-[11px] font-black uppercase opacity-60">⏱️ HORAS EXTRAS</span>
                         <div class="flex items-center gap-4">
-                            <button id="btn-restar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90 transition-transform">-</button>
+                            <button id="btn-restar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90">-</button>
                             <span id="count-horas-dia" class="font-black text-lg w-8 text-center">0</span>
-                            <button id="btn-sumar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90 transition-transform">+</button>
+                            <button id="btn-sumar-hora-dia" class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-black text-xl active:scale-90">+</button>
                         </div>
                     </div>
                     <!-- AAPP -->
                     <div class="flex items-center justify-between bg-white dark:bg-gray-700 p-4 rounded-3xl shadow-inner border border-gray-100 dark:border-gray-600">
                         <span class="text-[11px] font-black uppercase opacity-60">⏱️ AAPP</span>
                         <div class="flex items-center gap-4">
-                            <button id="btn-restar-aapp-dia" class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90 transition-transform">-</button>
+                            <button id="btn-restar-aapp-dia" class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90">-</button>
                             <span id="count-aapp-dia" class="font-black text-lg w-8 text-center">0</span>
-                            <button id="btn-sumar-aapp-dia" class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90 transition-transform">+</button>
+                            <button id="btn-sumar-aapp-dia" class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 font-black text-xl active:scale-90">+</button>
                         </div>
                     </div>
                 </div>
@@ -312,18 +298,11 @@
         });
 
         document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
-        
-        function cerrarFab() {
-            fabMenu.classList.add('hidden');
-            document.getElementById('icono-fab-svg').classList.remove('hidden');
-            document.getElementById('icono-fab-text').classList.add('hidden');
-        }
-        
-        document.getElementById('btn-logout').onclick = () => { cerrarFab(); signOut(auth); };
+        document.getElementById('btn-logout').onclick = () => { fabMenu.classList.add('hidden'); signOut(auth); };
 
         function setCloudStatus(estado) {
-            cloudStatus.textContent = '☁️';
-            cloudStatus.className = `text-base w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-400 dark:bg-green-600 text-white':(estado==='guardando'?'bg-yellow-300 dark:bg-yellow-500 text-white pulsing':'bg-red-400 dark:bg-red-600 text-white')}`;
+            cloudStatus.textContent = estado === 'ok' ? '☁️ OK' : (estado === 'guardando' ? '☁️ ...' : '☁️ ERR');
+            cloudStatus.className = `text-[10px] px-2 py-1 rounded-full font-bold flex items-center justify-center shadow-sm transition-colors duration-500 ${estado==='ok'?'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' : (estado==='guardando'?'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 pulsing':'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300')}`;
         }
 
         function iniciarSincronizacion() {
@@ -414,6 +393,7 @@
                 let clases = 'h-14 rounded-2xl text-[10px] relative flex flex-col items-center justify-center shadow-sm transition-all ';
                 const isWeekend = fObj.getDay() === 0 || fObj.getDay() === 6;
 
+                // Festivo usa el mismo verde que Libranza pero más oscuro, si no hay turno.
                 if(data.turno || data.guardia) {
                     if(data.turno) clases += (estilosT[data.turno.tipo] || 'bg-purple-100 text-purple-800');
                     else if(data.guardia?.subtipo === 'F') clases += 'bg-green-200 text-green-800 dark:bg-green-800 dark:text-white';
@@ -443,6 +423,7 @@
                 
                 if(data.nota) btn.innerHTML += `<span class="absolute top-1.5 right-2 w-1.5 h-1.5 bg-red-500 rounded-full shadow-sm"></span>`;
                 
+                // Píldoras para asegurar contraste
                 let pildoras = '';
                 if(data.horasExtras) pildoras += `<span class="pildora-fondo text-[8px] font-black ${data.horasExtras > 0 ? 'text-green-300' : 'text-blue-300'}">${data.horasExtras > 0 ? '+':''}${data.horasExtras}h</span>`;
                 if(data.aapp > 0 && data.aapp < 8) pildoras += `<span class="pildora-fondo text-[8px] font-black text-teal-300">${data.aapp}h AP</span>`;
@@ -645,39 +626,23 @@
 
         // --- 6. FAB Y CONTROLES GENERALES ---
         const btnFabMain = document.getElementById('btn-fab-main');
-        const fabMenu = document.getElementById('menu-opciones');
-        const iconoFabSvg = document.getElementById('icono-fab-svg');
-        const iconoFabText = document.getElementById('icono-fab-text');
+        const iconoFab = document.getElementById('icono-fab');
         
         btnFabMain.onclick = () => {
             const oculto = fabMenu.classList.contains('hidden');
             fabMenu.classList.toggle('hidden');
-            if(oculto) {
-                iconoFabSvg.classList.add('hidden');
-                iconoFabText.classList.remove('hidden');
-            } else {
-                iconoFabSvg.classList.remove('hidden');
-                iconoFabText.classList.add('hidden');
-            }
+            iconoFab.textContent = oculto ? '✕' : '🍔';
         };
 
         function actualizarTextosMenu() {
             document.getElementById('btn-tema').innerHTML = document.documentElement.classList.contains('dark') ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
             document.getElementById('btn-toggle-candado').innerHTML = soloLectura ? '🔒 Habilitar Edición' : '🔓 Bloquear Edición';
-            
-            if (modoMultiSelect) {
-                document.getElementById('btn-multi-select').innerHTML = '☑️ Cancelar Selección';
-                document.getElementById('btn-multi-select').classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-500');
-            } else {
-                document.getElementById('btn-multi-select').innerHTML = '☑️ Selección Múltiple';
-                document.getElementById('btn-multi-select').classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-500');
-            }
         }
 
-        document.getElementById('btn-tema').onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); actualizarTextosMenu(); cerrarFab(); };
-        document.getElementById('btn-toggle-candado').onclick = () => { soloLectura = !soloLectura; localStorage.setItem('soloLectura', soloLectura); actualizarTextosMenu(); cerrarFab(); };
-        document.getElementById('btn-hoy').onclick = () => { selectAnio.value = hoy.getFullYear(); cargarAnio(hoy.getFullYear()); cerrarFab(); setTimeout(() => { const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`); if(el) el.scrollIntoView({behavior:'smooth', block: 'start'}); }, 100); };
-        document.getElementById('btn-abrir-stats').onclick = () => { document.getElementById('modal-stats').classList.remove('hidden'); actualizarEstadisticas(parseInt(selectAnio.value)); cerrarFab(); };
+        document.getElementById('btn-tema').onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); actualizarTextosMenu(); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; };
+        document.getElementById('btn-toggle-candado').onclick = () => { soloLectura = !soloLectura; localStorage.setItem('soloLectura', soloLectura); actualizarTextosMenu(); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; };
+        document.getElementById('btn-hoy').onclick = () => { selectAnio.value = hoy.getFullYear(); cargarAnio(hoy.getFullYear()); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; setTimeout(() => { const el = document.getElementById(`mes-${hoy.getFullYear()}-${hoy.getMonth()}`); if(el) el.scrollIntoView({behavior:'smooth', block: 'start'}); }, 100); };
+        document.getElementById('btn-abrir-stats').onclick = () => { document.getElementById('modal-stats').classList.remove('hidden'); actualizarEstadisticas(parseInt(selectAnio.value)); fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔'; };
         document.getElementById('btn-cerrar-stats').onclick = () => document.getElementById('modal-stats').classList.add('hidden');
         document.getElementById('btn-toggle-dinero').onclick = () => { ocultarDinero = !ocultarDinero; localStorage.setItem('ocultarDinero', ocultarDinero); cargarAnio(parseInt(selectAnio.value)); };
 
@@ -692,8 +657,8 @@
                 diasSeleccionados.clear();
                 document.getElementById('banner-multi').classList.remove('hidden');
                 document.getElementById('banner-multi').classList.add('flex');
-                actualizarTextosMenu();
-                cerrarFab();
+                document.getElementById('btn-multi-select').classList.add('bg-blue-100', 'border-blue-500');
+                fabMenu.classList.add('hidden'); iconoFab.textContent = '🍔';
             }
             cargarAnio(parseInt(selectAnio.value));
         };
@@ -701,7 +666,7 @@
         function cancelarMultiSelect() {
             modoMultiSelect = false; diasSeleccionados.clear();
             document.getElementById('banner-multi').classList.add('hidden'); document.getElementById('banner-multi').classList.remove('flex');
-            actualizarTextosMenu();
+            document.getElementById('btn-multi-select').classList.remove('bg-blue-100', 'border-blue-500');
             cargarAnio(parseInt(selectAnio.value));
         }
 
