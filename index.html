@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- TITULO DE LA PESTAÑA ACTUALIZADO -->
     <title>Calendario personal</title>
     <meta name="theme-color" content="#1f2937">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,6 +13,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>tailwind.config = { darkMode: 'class' }</script>
     <style>
+        /* Suavizado de blancos para modo claro */
         body { 
             -webkit-tap-highlight-color: transparent; 
             user-select: none; 
@@ -24,16 +26,22 @@
         .pulsing { animation: pulse-soft 1.2s infinite; }
         .alerta-vacaciones { animation: pulse-soft 2s infinite; }
         .pildora-fondo { text-shadow: 0 0 2px rgba(0,0,0,0.8); background: rgba(0,0,0,0.15); padding: 0 4px; border-radius: 4px; }
-        .light-soft { background-color: #f8fafc; }
+        
+        /* Ajuste de brillo para fondos claros */
+        .light-soft { background-color: #f8fafc; } /* Slate-50 */
         .card-soft { background-color: #ffffff; border-color: #f1f5f9; }
+
+        /* Fix: Tailwind hidden debe prevalecer sobre flex */
         .hidden { display: none !important; }
     </style>
 </head>
+<!-- Cambiado bg-gray-200 por bg-slate-200 para un tono más neutro y menos amarillento -->
 <body class="bg-slate-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans min-h-screen pb-10 transition-colors duration-300">
 
     <!-- PANTALLA DE LOGIN -->
     <div id="pantalla-login" class="fixed inset-0 bg-slate-100 dark:bg-gray-900 z-50 flex flex-col items-center justify-center p-6 transition-opacity duration-300">
         <div class="bg-white dark:bg-gray-800 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-sm text-center border border-slate-100 dark:border-gray-700">
+            <!-- NOMBRE ACTUALIZADO -->
             <h1 class="text-3xl font-black mb-2 dark:text-white tracking-tight text-slate-800">Calendario Personal UNIR</h1>
             <p class="text-slate-500 dark:text-gray-400 text-sm mb-8 font-medium">Inicia sesión para acceder a tu cuadrante privado.</p>
             <button id="btn-login" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
@@ -138,11 +146,10 @@
             <div id="vista-principal" class="grid grid-cols-2 gap-2 transition-opacity">
                 <button class="opcion-turno p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M7">M7</button>
                 <button id="btn-menu-guardias" class="p-4 rounded-2xl bg-red-50 dark:bg-red-900/40 text-red-800 dark:text-red-100 font-black text-sm shadow-sm active:scale-95 transition-transform">GUARDIA...</button>
-                <!-- FIX: text-blue-950 para máximo contraste sobre bg-blue-100 -->
-                <button class="opcion-turno p-4 rounded-2xl bg-blue-100 dark:bg-blue-800 text-blue-950 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M8">M8</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M8">M8</button>
                 <button class="opcion-turno p-4 rounded-2xl bg-green-50 dark:bg-green-900/40 text-green-800 dark:text-green-100 font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="L">LIBRANZA</button>
                 <button class="opcion-turno p-4 rounded-2xl bg-blue-200 dark:bg-blue-700 text-blue-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="M9">M9</button>
-                <button class="opcion-turno p-4 rounded-2xl bg-green-100 dark:bg-green-800 text-green-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="guardia" data-subtipo="FF" data-precio="0">FINDE/FESTIVO</button>
+                <button class="opcion-turno p-4 rounded-2xl bg-green-100 dark:bg-green-800 text-green-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="guardia" data-subtipo="F" data-precio="0">FESTIVO</button>
                 <button class="opcion-turno p-4 rounded-2xl bg-blue-300 dark:bg-blue-600 text-blue-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="TT">TARDE</button>
                 <button class="opcion-turno p-4 rounded-2xl bg-green-200 dark:bg-green-700 text-green-900 dark:text-white font-black text-sm shadow-sm active:scale-95 transition-transform" data-categoria="turno" data-tipo="V">VACACIONES</button>
                 <button id="btn-menu-sedes" class="p-4 rounded-2xl bg-purple-50 dark:bg-purple-900/40 text-purple-800 dark:text-purple-100 font-black text-sm shadow-sm active:scale-95 transition-transform">SEDE...</button>
@@ -245,14 +252,13 @@
             {nombre: 'Embajadores', sub: 'Emb.'}, {nombre: 'J. Camarillo 11', sub: 'J. Cam.'}
         ];
 
-        // FIX: M8 ahora usa text-blue-950 para máximo contraste sobre bg-blue-100
         const estilosT = {
             'M7':'bg-blue-50 text-blue-800 dark:bg-blue-900',
-            'M8':'bg-blue-100 text-blue-950 dark:bg-blue-800 dark:text-white',
+            'M8':'bg-blue-100 text-blue-800 dark:bg-blue-800', 
             'M9':'bg-blue-200 text-blue-900 dark:bg-blue-700',
-            'TT':'bg-blue-300 text-blue-900 dark:bg-blue-600',
+            'TT':'bg-blue-300 text-blue-900 dark:bg-blue-600', 
             'V':'bg-green-200 text-green-900 dark:bg-green-700',
-            'L':'bg-green-50 text-green-800 dark:bg-green-900',
+            'L':'bg-green-50 text-green-800 dark:bg-green-900', 
             'IV':'bg-amber-50 text-amber-800 dark:bg-amber-900',
             'Sede': 'bg-purple-50 text-purple-800 dark:bg-purple-900'
         };
